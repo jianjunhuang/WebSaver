@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.jianjun.websaver.R
+import com.jianjun.websaver.base.BaseFragment
 
 /**
  * Created by jianjunhuang on 10/22/19.
  */
-class SettingsFragment : Fragment() {
+class SettingsFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
