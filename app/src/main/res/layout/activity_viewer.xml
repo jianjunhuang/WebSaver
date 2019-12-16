@@ -45,9 +45,10 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:layout_behavior=".utils.BottomBarBehavior">
+        app:layout_behavior=".utils.ScrollAwareBehavior">
 
         <ImageView
+            android:id="@+id/iv_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

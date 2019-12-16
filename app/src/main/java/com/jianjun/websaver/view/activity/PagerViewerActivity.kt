@@ -1,26 +1,41 @@
 package com.jianjun.websaver.view.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
-import androidx.room.util.StringUtil
+import com.google.android.material.snackbar.Snackbar
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.BaseActivity
+import com.jianjun.websaver.base.mvp.BaseMvpActivity
+import com.jianjun.websaver.contact.PagerViewerContact
+import com.jianjun.websaver.presenter.PagerViewerPresenter
 import com.ycbjie.webviewlib.*
 
 /**
  * Created by jianjunhuang on 11/13/19.
  */
 
-class PagerViewerActivity : BaseActivity() {
+class PagerViewerActivity :
+    BaseMvpActivity<PagerViewerPresenter>(), PagerViewerContact.IViewerView {
+
+    override fun onPagerSaved() {
+        Snackbar.make(webview!!, "Save Successfully", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onPagerSavedError(reason: String) {
+        Snackbar.make(webview!!, reason, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun createPresenter(): PagerViewerPresenter? {
+        return PagerViewerPresenter()
+    }
 
     var webview: X5WebView? = null
     var toolbar: Toolbar? = null
     var progressBar: ProgressBar? = null
-
+    var title: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_viewer)
@@ -32,14 +47,20 @@ class PagerViewerActivity : BaseActivity() {
         setupWebView()
 
         val url = intent?.getStringExtra(Intent.EXTRA_TEXT)
-
         webview?.loadUrl(url.toString())
+
+        findViewById<ImageView>(R.id.iv_save).setOnClickListener {
+            if (url != null) {
+                getPresenter()?.savePager(url, title, "")
+            }
+        }
     }
 
     private fun setupWebView() {
         val listener = object : InterWebListener {
             override fun showTitle(title: String?) {
                 toolbar?.title = title
+                this@PagerViewerActivity.title = title
             }
 
             override fun hindProgressBar() {

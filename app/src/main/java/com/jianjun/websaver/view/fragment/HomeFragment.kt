@@ -20,7 +20,6 @@ class HomeFragment : BaseFragment() {
     private var viewpager: ViewPager? = null
     private var tablayout: TabLayout? = null
     private val pagerListFragments: Array<Fragment> = arrayOf(
-        PagerListFragment(),
         PagerListFragment()
     )
 
@@ -60,7 +59,7 @@ class HomeFragment : BaseFragment() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return "Tag"
+            return "All"
         }
 
     }

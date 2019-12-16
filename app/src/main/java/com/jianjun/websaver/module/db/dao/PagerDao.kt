@@ -17,7 +17,7 @@ interface PagerDao {
     @Query("SELECT * FROM pager WHERE pager.url in (SELECT url FROM TagsMapper WHERE tag = :tag )")
     fun queryPagersByTag(tag: String): Flowable<List<Pager>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPager(pager: Pager): Completable
 
     @Delete

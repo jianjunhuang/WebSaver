@@ -13,11 +13,11 @@ import com.jianjun.websaver.base.BaseActivity
 /**
  * Created by jianjunhuang on 10/25/19.
  */
-class ImportPagerActivity : BaseActivity() {
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val url = intent?.getStringExtra(Intent.EXTRA_TEXT)
-    }
-}
+//class ImportPagerActivity : BaseActivity() {
+//
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        val url = intent?.getStringExtra(Intent.EXTRA_TEXT)
+//    }
+//}

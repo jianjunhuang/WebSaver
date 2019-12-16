@@ -22,27 +22,19 @@ abstract class WebSaverDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: WebSaverDatabase? = null
 
-        fun getInstance(context: Context): WebSaverDatabase = INSTANCE ?: synchronized(this) {
-            INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+        fun init(context: Context) {
+            synchronized(this) {
+                INSTANCE = buildDatabase(context)
+            }
         }
+
+        fun getInstance(): WebSaverDatabase? = INSTANCE
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                WebSaverDatabase::class.java, "websave.db"
+                WebSaverDatabase::class.java, "websaver.db"
             )
                 .build()
-    }
-
-    override fun createOpenHelper(config: DatabaseConfiguration?): SupportSQLiteOpenHelper {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun createInvalidationTracker(): InvalidationTracker {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun clearAllTables() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

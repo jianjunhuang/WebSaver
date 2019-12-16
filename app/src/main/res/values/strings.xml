@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WebSaver</string>
+    <string name="settings_key_import">Import</string>
+    <string name="settings_summary_import">Import data from csv</string>
+    <string name="settings_key_export">Export</string>
+    <string name="settings_summary_export">Export data as csv</string>
+    <string name="settings_category_data">Data</string>
 </resources>

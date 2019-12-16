@@ -1,11 +1,13 @@
 package com.jianjun.websaver
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jianjun.websaver.module.db.WebSaverDatabase
 import com.jianjun.websaver.module.db.dao.PagerDao
 import com.jianjun.websaver.module.db.entity.Pager
+import io.reactivex.functions.Consumer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -19,6 +21,8 @@ import kotlin.collections.ArrayList
  */
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest {
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var db: WebSaverDatabase
 
@@ -45,5 +49,10 @@ class DatabaseTest {
 
         db.pagerDao().queryAllPagers().test().assertValueCount(1)
 
+    }
+
+    @Test
+    fun getValues() {
+        db.pagerDao().queryAllPagers().subscribe(Consumer { assert(it.isNotEmpty()) })
     }
 }
