@@ -4,7 +4,11 @@ import androidx.fragment.app.FragmentActivity
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.functions.Function
-import java.io.*
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -14,11 +18,10 @@ import kotlin.collections.ArrayList
  *
  * Created by jianjunhuang on 12/13/19.
  */
-class CSVUtils(var context: FragmentActivity, private val defaultFileName: String) {
-
-    constructor(context: FragmentActivity) : this(context, "backup")
+class CSVUtils(var context: FragmentActivity) {
 
     public fun <T> write(
+        defaultFileName: String,
         datas: List<T>,
         mapper: Function<T, List<String>>,
         vararg titles: String
@@ -37,13 +40,13 @@ class CSVUtils(var context: FragmentActivity, private val defaultFileName: Strin
                 row.addAll(it)
                 return@concatMap Observable.just(row)
             }.concatMapCompletable {
-                return@concatMapCompletable write(it)
+                return@concatMapCompletable write(defaultFileName, it)
             }
     }
 
-    fun write(rows: List<List<String>>): Completable {
+    fun write(defaultFileName: String, rows: List<List<String>>): Completable {
         var writer: BufferedWriter? = null
-        return RxFile(context, "$defaultFileName.csv").getFileUri()
+        return RxFile(context).createDoc("$defaultFileName.csv", CSV_TYPE)
             .flatMap {
                 writer =
                     BufferedWriter(OutputStreamWriter(context.contentResolver.openOutputStream(it)))
@@ -51,11 +54,11 @@ class CSVUtils(var context: FragmentActivity, private val defaultFileName: Strin
             }
             .compose(observableToMain())
             .doOnNext {
-                for (item in it) {
-                    writer?.append("\"");
+                for ((index, item) in it.withIndex()) {
                     writer?.append(item)
-                    writer?.append("\"")
-                    writer?.append(",")
+                    if (index != it.size - 1) {
+                        writer?.append(",")
+                    }
                 }
                 writer?.append("\n")
             }.doOnComplete {
@@ -65,4 +68,88 @@ class CSVUtils(var context: FragmentActivity, private val defaultFileName: Strin
 
     }
 
+    fun <T> read(mapper: Function<List<String>, T>): Observable<List<T>> {
+        var reader: BufferedReader? = null
+        return RxFile(context).getDoc(CSV_TYPE)
+            .flatMap {
+                reader =
+                    BufferedReader(InputStreamReader(context.contentResolver.openInputStream(it)))
+                return@flatMap Observable.fromIterable(reader?.readLines())
+            }.compose(observableToMain()).flatMap {
+                return@flatMap Observable.just(fromCSVLinetoArray(it))
+            }
+            .doOnComplete {
+                reader?.close()
+            }
+            .map(mapper)
+            .toList()
+            .toObservable()
+    }
+
+    fun fromCSVLinetoArray(source: String?): List<String> {
+        if (source == null || source.isEmpty()) {
+            return ArrayList<String>()
+        }
+        var currentPosition = 0
+        val maxPosition = source.length
+        var nextComma = 0
+        val rtnArray: ArrayList<String> = ArrayList()
+        while (currentPosition < maxPosition) {
+            nextComma = nextComma(source, currentPosition)
+            rtnArray.add(nextToken(source, currentPosition, nextComma))
+            currentPosition = nextComma + 1
+            if (currentPosition == maxPosition) {
+                rtnArray.add("")
+            }
+        }
+        return rtnArray
+    }
+
+
+    /**
+     * 查询下一个逗号的位置。
+     *
+     * @param source 文字列
+     * @param st  检索开始位置
+     * @return 下一个逗号的位置。
+     */
+    private fun nextComma(source: String, st: Int): Int {
+        var st = st
+        val maxPosition = source.length
+        var inquote = false
+        while (st < maxPosition) {
+            val ch = source[st]
+            if (!inquote && ch == ',') {
+                break
+            } else if ('"' == ch) {
+                inquote = !inquote
+            }
+            st++
+        }
+        return st
+    }
+
+    /**
+     * 取得下一个字符串
+     */
+    private fun nextToken(source: String, st: Int, nextComma: Int): String {
+        val strb = StringBuffer()
+        var next = st
+        while (next < nextComma) {
+            val ch = source[next++]
+            if (ch == '"') {
+                if (st + 1 < next && next < nextComma && source[next] == '"') {
+                    strb.append(ch)
+                    next++
+                }
+            } else {
+                strb.append(ch)
+            }
+        }
+        return strb.toString()
+    }
+
+    companion object {
+        const val CSV_TYPE = "*/*"
+    }
 }

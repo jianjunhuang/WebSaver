@@ -4,7 +4,6 @@ import com.jianjun.websaver.module.db.WebSaverDatabase
 import com.jianjun.websaver.module.db.entity.Pager
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -28,6 +27,10 @@ class PagerDbModel : IPagerDbModel {
 
     override fun queryPagers(): Flowable<List<Pager>>? {
         return WebSaverDatabase.getInstance()?.pagerDao()?.queryAllPagers()
+    }
+
+    override fun savePagers(pager: List<Pager>): Completable? {
+        return WebSaverDatabase.getInstance()?.pagerDao()?.insertPagers(pager)
     }
 
     override fun savePager(pager: Pager): Completable? {

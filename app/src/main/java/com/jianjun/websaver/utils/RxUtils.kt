@@ -1,10 +1,13 @@
 package com.jianjun.websaver.utils
 
+import io.reactivex.CompletableObserver
 import io.reactivex.CompletableTransformer
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
 import io.reactivex.ObservableTransformer
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 /**

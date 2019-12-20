@@ -8,6 +8,7 @@ import io.reactivex.Flowable
 interface IPagerDbModel : IModel {
     fun savePager(pager: Pager): Completable?
     fun queryPagers(): Flowable<List<Pager>>?
+    fun savePagers(pager: List<Pager>): Completable?
     fun importDate(pagers: List<Pager>): Completable?
     fun exportDate(): Completable?
 }

@@ -9,32 +9,26 @@ import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.io.FileWriter
+import java.lang.Exception
 
 
 /**
  * Created by jianjunhuang on 12/15/19.
  */
-class RxFile(private val activity: FragmentActivity, private val fileName: String) {
+class RxFile(private val activity: FragmentActivity) {
 
-    private var callbackFragment: ActivityResultFragment = ActivityResultFragment()
+    private var rxActivityResult: RxActivityResult = RxActivityResult(activity)
 
-    init {
-        activity.supportFragmentManager.beginTransaction()
-            .add(callbackFragment, this.javaClass.simpleName).commitNow()
-    }
-
-    public fun getFileUri(): Observable<Uri> {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        // you can set file mimetype
-        intent.type = "*/*"
-        // default file name
-        intent.putExtra(Intent.EXTRA_TITLE, fileName)
-        val rxActivityResult: RxActivityResult = RxActivityResult(activity)
+    public fun createDoc(fileName: String, docType: String): Observable<Uri> {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = docType
+            putExtra(Intent.EXTRA_TITLE, fileName)
+        }
         return rxActivityResult.startForResult(intent, REQUEST_CODE_FOR_CREATE_FILE)
             .flatMap {
                 if (it.resultCode != Activity.RESULT_OK) {
-                    return@flatMap Observable.just(null)
+                    throw Exception("can't find the file")
                 }
                 return@flatMap Observable.just(it.data?.data)
             }
@@ -42,6 +36,20 @@ class RxFile(private val activity: FragmentActivity, private val fileName: Strin
 
     companion object {
         const val REQUEST_CODE_FOR_CREATE_FILE = 777
+        const val REQUEST_CODE_FOR_GET_FILE = 888
     }
 
+    public fun getDoc(docType: String): Observable<Uri> {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = docType
+        }
+        return rxActivityResult.startForResult(intent, REQUEST_CODE_FOR_GET_FILE)
+            .flatMap {
+                if (it.resultCode != Activity.RESULT_OK) {
+                    throw Exception("can't find the file")
+                }
+                return@flatMap Observable.just(it.data?.data)
+            }
+    }
 }

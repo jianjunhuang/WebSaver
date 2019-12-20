@@ -20,6 +20,9 @@ interface PagerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPager(pager: Pager): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPagers(pager: List<Pager>): Completable
+
     @Delete
     fun deletePager(pager: Pager): Completable
 }
