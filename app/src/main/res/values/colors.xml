@@ -8,4 +8,5 @@
     <color name="colorNavDef">#bfbfbf</color>
     <color name="white">#fafafa</color>
     <color name="black">#222222</color>
+    <color name="colorTag">#fcfcfc</color>
 </resources>

@@ -4,10 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_tags"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="tags" />
-
+        android:layout_height="match_parent" />
 </LinearLayout>
