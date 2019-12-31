@@ -48,11 +48,11 @@ class PagerViewerActivity :
         setupWebView()
 
 
-        val url = if (Intent.ACTION_VIEW.equals(intent.action)) {
+        val url = if (Intent.ACTION_VIEW == intent.action)
             intent.data.toString()
-        } else {
+        else
             intent.getStringExtra(Intent.EXTRA_TEXT)
-        }
+
         webview?.loadUrl(url.toString())
 
         findViewById<ImageView>(R.id.iv_save).setOnClickListener {
