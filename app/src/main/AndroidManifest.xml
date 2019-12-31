@@ -22,19 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--   Import pager activity    -->
-        <!--        <activity android:name=".view.activity.ImportPagerActivity">-->
-        <!--            <intent-filter android:label="Import to WebSaver">-->
-        <!--                <action android:name="android.intent.action.SEND" />-->
-        <!--                <action android:name="android.intent.action.SEND_MULTIPLE" />-->
-
-        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
-        <!--                <category android:name="android.intent.category.DEFAULT" />-->
-
-        <!--                <data android:mimeType="text/*" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
-        <!--   Pager viewer activity  -->
         <activity android:name=".view.activity.PagerViewerActivity">
             <intent-filter android:label="WebSaver">
                 <action android:name="android.intent.action.SEND" />
@@ -43,7 +30,20 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/*" />
+                <data
+                    android:mimeType="text/*"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter android:label="WebSaver">
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:mimeType="text/*"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
     </application>
