@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jianjun.websaver">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,29 +24,27 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.PagerViewerActivity">
+
             <intent-filter android:label="WebSaver">
-                <action android:name="android.intent.action.SEND" />
-                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:mimeType="text/*"
-                    android:scheme="https" />
+                <data android:scheme="https" />
             </intent-filter>
             <intent-filter android:label="WebSaver">
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
 
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data
-                    android:mimeType="text/*"
-                    android:scheme="http" />
+                <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.ycbjie.webviewlib.X5WebViewActivity"
+            tools:node="remove" />
     </application>
 
 </manifest>

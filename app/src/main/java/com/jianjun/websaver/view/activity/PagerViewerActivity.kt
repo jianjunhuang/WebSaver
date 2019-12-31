@@ -3,6 +3,7 @@ package com.jianjun.websaver.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
@@ -46,7 +47,12 @@ class PagerViewerActivity :
 
         setupWebView()
 
-        val url = intent?.getStringExtra(Intent.EXTRA_TEXT)
+
+        val url = if (Intent.ACTION_VIEW.equals(intent.action)) {
+            intent.data.toString()
+        } else {
+            intent.getStringExtra(Intent.EXTRA_TEXT)
+        }
         webview?.loadUrl(url.toString())
 
         findViewById<ImageView>(R.id.iv_save).setOnClickListener {
@@ -90,7 +96,12 @@ class PagerViewerActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        webview?.destroy()
+        webview?.let {
+            val viewgroup = it.parent as ViewGroup
+            viewgroup.removeView(it)
+            it.stopLoading()
+            it.destroy()
+        }
     }
 
     override fun onResume() {
