@@ -19,7 +19,7 @@ import com.ycbjie.webviewlib.*
  */
 
 class PagerViewerActivity :
-    BaseMvpActivity<PagerViewerPresenter>(), PagerViewerContact.IViewerView {
+    BaseMvpActivity<PagerViewerPresenter>(), PagerViewerContact.IViewerView, View.OnClickListener {
 
     override fun onPagerSaved() {
         Snackbar.make(webview!!, "Save Successfully", Snackbar.LENGTH_SHORT).show()
@@ -37,6 +37,7 @@ class PagerViewerActivity :
     var toolbar: Toolbar? = null
     var progressBar: ProgressBar? = null
     var title: String? = null
+    var url: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_viewer)
@@ -47,19 +48,15 @@ class PagerViewerActivity :
 
         setupWebView()
 
-
-        val url = if (Intent.ACTION_VIEW == intent.action)
+        url = if (Intent.ACTION_VIEW == intent.action)
             intent.data.toString()
         else
             intent.getStringExtra(Intent.EXTRA_TEXT)
 
         webview?.loadUrl(url.toString())
 
-        findViewById<ImageView>(R.id.iv_save).setOnClickListener {
-            if (url != null) {
-                getPresenter()?.savePager(url, title, "")
-            }
-        }
+        findViewById<ImageView>(R.id.iv_save).setOnClickListener(this)
+        findViewById<ImageView>(R.id.iv_close).setOnClickListener(this)
     }
 
     private fun setupWebView() {
@@ -107,6 +104,17 @@ class PagerViewerActivity :
     override fun onResume() {
         super.onResume()
 
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.iv_close -> finish()
+            R.id.iv_save -> {
+                url?.let {
+                    getPresenter()?.savePager(it, title, "")
+                }
+            }
+        }
     }
 
 }
