@@ -1,6 +1,8 @@
 package com.jianjun.websaver.view.activity
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,8 @@ import com.jianjun.websaver.R
 import com.jianjun.websaver.base.mvp.BaseMvpActivity
 import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.presenter.PagerViewerPresenter
+import com.jianjun.websaver.webview.MWebViewChromeClient
+import com.tencent.smtt.sdk.WebView
 import com.ycbjie.webviewlib.*
 
 /**
@@ -80,7 +84,16 @@ class PagerViewerActivity :
 
         }
         webview?.x5WebChromeClient?.setWebListener(listener)
-        webview?.x5WebViewClient?.setWebListener(listener)
+        val webChromeClient = MWebViewChromeClient(webview, this)
+        webChromeClient.setWebListener(listener)
+        webChromeClient.setOnReceivedIconListener(object :
+            MWebViewChromeClient.OnReceivedIconListener {
+            override fun onReceivedIcon(webView: WebView?, bitmap: Bitmap?) {
+                toolbar?.logo = BitmapDrawable(resources, bitmap)
+            }
+
+        })
+        webview?.webChromeClient = webChromeClient
     }
 
     override fun onBackPressed() {
