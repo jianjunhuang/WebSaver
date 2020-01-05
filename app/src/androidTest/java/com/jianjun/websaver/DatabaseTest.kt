@@ -47,12 +47,18 @@ class DatabaseTest {
             Pager("https://www.google.com", "title", "imageUrl", "from", date.time)
         db.pagerDao().insertPager(pager).blockingAwait()
 
-        db.pagerDao().queryAllPagers().test().assertValueCount(1)
-
+//        db.pagerDao().queryAllPagers().test().assertValueCount(1)
+        db.pagerDao().queryAllPagers().subscribe(Consumer {
+            println(it)
+            assert(it.isNotEmpty())
+        })
     }
 
     @Test
     fun getValues() {
-        db.pagerDao().queryAllPagers().subscribe(Consumer { assert(it.isNotEmpty()) })
+        db.pagerDao().queryAllPagers().subscribe(Consumer {
+            println(it)
+            assert(it.isNotEmpty())
+        })
     }
 }

@@ -14,6 +14,8 @@ data class Pager(
     var title: String?,
     var image: String?,
     var source: String?,
-    var createDate: Long
+    var createDate: Long,
+    var isRead: Boolean = false,
+    var position: Long = 0
 )
 
