@@ -28,7 +28,9 @@ class SettingsPresenter : BasePresenter<SettingsContact.SettingsView, IPagerDbMo
                         "\"${pager.title.toString()}\"",
                         pager.createDate.toString(),
                         pager.image.toString(),
-                        pager.source.toString()
+                        pager.source.toString(),
+                        pager.position.toString(),
+                        pager.isRead.toString()
                     ).asList()
                 })
             }?.subscribe(object : CompletableObserver() {
@@ -47,13 +49,19 @@ class SettingsPresenter : BasePresenter<SettingsContact.SettingsView, IPagerDbMo
 
     public fun importData(csvUtils: CSVUtils?) {
         csvUtils?.read(Function<List<String>, Pager> {
-            return@Function Pager(
-                url = it[0],
-                title = it[1],
-                createDate = it[2].toLong(),
-                image = it[3],
-                source = it[4]
-            )
+            val pager = Pager("", "", "", "", 0)
+            for ((index, value) in it.withIndex()) {
+                when (index) {
+                    0 -> pager.url = it[0]
+                    1 -> pager.title = it[1]
+                    2 -> pager.createDate = it[2].toLong()
+                    3 -> pager.image = it[3]
+                    4 -> pager.source = it[4]
+                    5 -> pager.position = it[5].toLong()
+                    6 -> pager.isRead = it[6].toBoolean()
+                }
+            }
+            return@Function pager
         })?.compose(observableToMain())?.flatMapCompletable {
             return@flatMapCompletable getModel().savePagers(it)?.compose(completableToMain())
         }?.subscribe(object : CompletableObserver() {

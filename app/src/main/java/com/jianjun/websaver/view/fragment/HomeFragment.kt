@@ -11,23 +11,22 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.jianjun.websaver.R
 import com.jianjun.websaver.base.BaseFragment
+import com.jianjun.websaver.base.mvp.BaseMvpFragment
+import com.jianjun.websaver.contact.HomeContact
 import com.jianjun.websaver.module.PagerTag
 import com.jianjun.websaver.module.TAG_ALL
 import com.jianjun.websaver.module.TAG_READ
 import com.jianjun.websaver.module.TAG_UNREAD
+import com.jianjun.websaver.presenter.HomePresenter
 
 /**
  * Created by jianjunhuang on 10/22/19.
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeContact.IHomeView {
 
     private var viewpager: ViewPager? = null
     private var tablayout: TabLayout? = null
-    private val pagerListFragments: Array<PagerListFragment> = arrayOf(
-        PagerListFragment.create(TAG_ALL),
-        PagerListFragment.create(TAG_READ),
-        PagerListFragment.create(TAG_UNREAD)
-    )
+    private val pagerListFragments: List<String>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +70,18 @@ class HomeFragment : BaseFragment() {
         override fun getPageTitle(position: Int): CharSequence? {
             return fragments[position].getTitle()
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun createPresenter(): HomePresenter {
+        return HomePresenter()
+    }
+
+    override fun onTags(tags: List<String>) {
 
     }
 }
