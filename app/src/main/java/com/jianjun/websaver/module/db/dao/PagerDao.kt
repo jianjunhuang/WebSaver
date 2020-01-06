@@ -28,4 +28,7 @@ interface PagerDao {
 
     @Query("SELECT * FROM pager WHERE pager.url = :url")
     fun getPagerByUrl(url: String): Flowable<Pager>
+
+    @Query("SELECT * FROM pager WHERE pager.isRead = :isRead")
+    fun queryPagerByReadStatus(isRead: Boolean): Flowable<List<Pager>>
 }

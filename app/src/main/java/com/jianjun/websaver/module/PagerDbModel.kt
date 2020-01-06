@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by jianjunhuang on 11/24/19.
  */
 class PagerDbModel : IPagerDbModel {
+
     override fun importDate(pagers: List<Pager>): Completable? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -29,8 +30,16 @@ class PagerDbModel : IPagerDbModel {
         return WebSaverDatabase.getInstance()?.pagerDao()?.getPagerByUrl(url)
     }
 
+    override fun queryPagerByReadStatus(isRead: Boolean): Flowable<List<Pager>>? {
+        return WebSaverDatabase.getInstance()?.pagerDao()?.queryPagerByReadStatus(isRead)
+    }
+
     override fun queryPagers(): Flowable<List<Pager>>? {
         return WebSaverDatabase.getInstance()?.pagerDao()?.queryAllPagers()
+    }
+
+    override fun queryPagersByTag(tag: String): Flowable<List<Pager>>? {
+        return WebSaverDatabase.getInstance()?.pagerDao()?.queryPagersByTag(tag)
     }
 
     override fun savePagers(pager: List<Pager>): Completable? {

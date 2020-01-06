@@ -2,8 +2,7 @@ package com.jianjun.websaver.presenter
 
 import com.jianjun.websaver.base.mvp.BasePresenter
 import com.jianjun.websaver.contact.PagerListContact
-import com.jianjun.websaver.module.IPagerDbModel
-import com.jianjun.websaver.module.PagerDbModel
+import com.jianjun.websaver.module.*
 import com.jianjun.websaver.utils.flowableToMain
 import com.jianjun.websaver.utils.observableToMain
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,10 +20,16 @@ class PagerListPresenter :
         return PagerDbModel()
     }
 
-    open fun queryPagers() {
-        getModel().queryPagers()?.compose(flowableToMain())?.subscribe(Consumer {
+    open fun queryPagers(tag: String) {
+        val pagerFlowable = when (tag) {
+            TAG_ALL -> getModel().queryPagers()
+            TAG_READ -> getModel().queryPagerByReadStatus(true)
+            TAG_UNREAD -> getModel().queryPagerByReadStatus(false)
+            else -> getModel().queryPagersByTag(tag)
+        }
+        pagerFlowable?.compose(flowableToMain())?.subscribe {
             getView().onPagers(pagers = it)
-        })?.let { addDisposable(it) }
+        }?.let { addDisposable(it) }
     }
 
 }

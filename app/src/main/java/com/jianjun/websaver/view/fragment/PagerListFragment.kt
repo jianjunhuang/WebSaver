@@ -5,25 +5,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.BaseFragment
 import com.jianjun.websaver.base.ItemClickListener
 import com.jianjun.websaver.base.mvp.BaseMvpFragment
 import com.jianjun.websaver.contact.PagerListContact
+import com.jianjun.websaver.module.TAG_ALL
 import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerListPresenter
 import com.jianjun.websaver.view.activity.PagerViewerActivity
 import com.jianjun.websaver.view.adapter.PagerListAdapter
-import java.util.*
 
 /**
  * Created by jianjunhuang on 10/25/19.
  */
 class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContact.IPagersView,
     ItemClickListener<Pager> {
+
+    companion object {
+        const val KEY_TAG = "key_tag"
+        fun create(tag: String): PagerListFragment {
+            val fragment = PagerListFragment()
+            val bundle = Bundle()
+            bundle.putString(KEY_TAG, tag)
+            fragment.arguments = bundle
+            return fragment
+        }
+
+    }
+
+    private var pagerTag: String = TAG_ALL
+
+
     override fun onItemClick(data: Pager, position: Int, adapter: RecyclerView.Adapter<*>) {
         val intent = Intent()
         context?.let {
@@ -46,6 +60,11 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
     private var pagerList: RecyclerView? = null
     private var pagerAdapter: PagerListAdapter? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pagerTag = arguments?.getString(KEY_TAG).toString()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,6 +84,10 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
 
     override fun onResume() {
         super.onResume()
-        getPresenter()?.queryPagers()
+        getPresenter()?.queryPagers(pagerTag)
+    }
+
+    fun getTitle(): String {
+        return pagerTag
     }
 }

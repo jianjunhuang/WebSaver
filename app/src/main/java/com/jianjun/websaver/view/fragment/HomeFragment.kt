@@ -11,6 +11,10 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.jianjun.websaver.R
 import com.jianjun.websaver.base.BaseFragment
+import com.jianjun.websaver.module.PagerTag
+import com.jianjun.websaver.module.TAG_ALL
+import com.jianjun.websaver.module.TAG_READ
+import com.jianjun.websaver.module.TAG_UNREAD
 
 /**
  * Created by jianjunhuang on 10/22/19.
@@ -19,8 +23,10 @@ class HomeFragment : BaseFragment() {
 
     private var viewpager: ViewPager? = null
     private var tablayout: TabLayout? = null
-    private val pagerListFragments: Array<Fragment> = arrayOf(
-        PagerListFragment()
+    private val pagerListFragments: Array<PagerListFragment> = arrayOf(
+        PagerListFragment.create(TAG_ALL),
+        PagerListFragment.create(TAG_READ),
+        PagerListFragment.create(TAG_UNREAD)
     )
 
     override fun onCreateView(
@@ -47,7 +53,11 @@ class HomeFragment : BaseFragment() {
         tablayout?.setupWithViewPager(viewpager)
     }
 
-    class TabAdapter(fm: FragmentManager, behavior: Int, private val fragments: Array<Fragment>) :
+    class TabAdapter(
+        fm: FragmentManager,
+        behavior: Int,
+        private val fragments: Array<PagerListFragment>
+    ) :
         FragmentPagerAdapter(fm, behavior) {
 
         override fun getItem(position: Int): Fragment {
@@ -59,7 +69,7 @@ class HomeFragment : BaseFragment() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return "All"
+            return fragments[position].getTitle()
         }
 
     }
