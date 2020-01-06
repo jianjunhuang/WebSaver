@@ -25,4 +25,7 @@ interface PagerDao {
 
     @Delete
     fun deletePager(pager: Pager): Completable
+
+    @Query("SELECT * FROM pager WHERE pager.url = :url")
+    fun getPagerByUrl(url: String): Flowable<Pager>
 }

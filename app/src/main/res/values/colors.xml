@@ -9,4 +9,6 @@
     <color name="white">#fafafa</color>
     <color name="black">#222222</color>
     <color name="colorTag">#fcfcfc</color>
+    <color name="colorUnRead">@color/black</color>
+    <color name="colorRead">#bdbdbd</color>
 </resources>

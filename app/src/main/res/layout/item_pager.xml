@@ -25,22 +25,14 @@
         tools:text="title" />
 
     <TextView
-        android:id="@+id/tv_refer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        tools:text="from google" />
-
-    <TextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_refer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_refer"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
         tools:text="date" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

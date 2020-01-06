@@ -60,6 +60,7 @@ class PagerViewerActivity :
         else
             intent.getStringExtra(Intent.EXTRA_TEXT)
 
+        getPresenter()?.loadCache(url.toString())
         webview?.loadUrl(url.toString())
 
         referrer = getReferrer()?.authority
@@ -89,7 +90,7 @@ class PagerViewerActivity :
             }
 
         }
-        webview?.x5WebChromeClient?.setWebListener(listener)
+        webview?.x5WebViewClient?.setWebListener(listener)
         val webChromeClient = MWebViewChromeClient(webview, this)
         webChromeClient.setWebListener(listener)
         webChromeClient.setOnReceivedIconListener(object :
@@ -122,7 +123,7 @@ class PagerViewerActivity :
 
     override fun onResume() {
         super.onResume()
-
+        getPresenter()?.updateReadState()
     }
 
     override fun onClick(v: View?) {

@@ -25,6 +25,10 @@ class PagerDbModel : IPagerDbModel {
             }
     }
 
+    override fun getPagerByUrl(url: String): Flowable<Pager>? {
+        return WebSaverDatabase.getInstance()?.pagerDao()?.getPagerByUrl(url)
+    }
+
     override fun queryPagers(): Flowable<List<Pager>>? {
         return WebSaverDatabase.getInstance()?.pagerDao()?.queryAllPagers()
     }

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jianjun.websaver.R
 import com.jianjun.websaver.base.ItemClickListener
@@ -65,12 +67,20 @@ class PagerListAdapter : RecyclerView.Adapter<PagerListAdapter.PagersViewHolder>
                 this
             )
         }
+        val context = holder.itemView.context
+        if (pager.isRead) {
+            val colorRead = ContextCompat.getColor(context, R.color.colorRead)
+            holder.date.setTextColor(colorRead)
+            holder.title.setTextColor(colorRead)
+        } else {
+            val colorUnRead = ContextCompat.getColor(context, R.color.colorUnRead)
+            holder.date.setTextColor(colorUnRead)
+            holder.title.setTextColor(colorUnRead)
+        }
     }
 
     class PagersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView = itemView.findViewById(R.id.tv_title)
-        var refer: TextView = itemView.findViewById(R.id.tv_refer)
         var date: TextView = itemView.findViewById(R.id.tv_date)
-
     }
 }

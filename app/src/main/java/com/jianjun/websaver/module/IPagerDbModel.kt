@@ -11,4 +11,5 @@ interface IPagerDbModel : IModel {
     fun savePagers(pager: List<Pager>): Completable?
     fun importDate(pagers: List<Pager>): Completable?
     fun exportDate(): Completable?
+    fun getPagerByUrl(url: String): Flowable<Pager>?
 }
