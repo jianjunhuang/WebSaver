@@ -43,6 +43,8 @@ class PagerViewerActivity :
     var progressBar: ProgressBar? = null
     var title: String? = null
     var url: String? = null
+    var referrer: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_viewer)
@@ -59,6 +61,9 @@ class PagerViewerActivity :
             intent.getStringExtra(Intent.EXTRA_TEXT)
 
         webview?.loadUrl(url.toString())
+
+        referrer = getReferrer()?.authority
+        toolbar?.subtitle = "From $referrer"
 
         findViewById<ImageView>(R.id.iv_save).setOnClickListener(this)
         findViewById<ImageView>(R.id.iv_close).setOnClickListener(this)
@@ -125,7 +130,7 @@ class PagerViewerActivity :
             R.id.iv_close -> finish()
             R.id.iv_save -> {
                 url?.let {
-                    getPresenter()?.savePager(it, title, "")
+                    getPresenter()?.savePager(it, title, referrer)
                 }
             }
         }
