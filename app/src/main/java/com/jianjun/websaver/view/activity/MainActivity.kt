@@ -37,14 +37,14 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnSelectedListener {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.addItem(
             Navigation(R.drawable.ic_home),
-            Navigation(R.drawable.ic_tags),
-            Navigation(R.drawable.ic_notes),
+//            Navigation(R.drawable.ic_tags),
+//            Navigation(R.drawable.ic_notes),
             Navigation(R.drawable.ic_settings)
         )
         bottomNav.setSelectedListener(this)
         fragments.add(HomeFragment())
-        fragments.add(TagsFragment())
-        fragments.add(NotesFragment())
+//        fragments.add(TagsFragment())
+//        fragments.add(NotesFragment())
         fragments.add(SettingsFragment())
         val transition: FragmentTransaction = supportFragmentManager.beginTransaction()
         for (fragment in fragments) {

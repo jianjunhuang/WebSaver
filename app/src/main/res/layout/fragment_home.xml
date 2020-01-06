@@ -28,13 +28,15 @@
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                android:visibility="gone" />
 
             <ImageView
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_sort" />
+                android:src="@drawable/ic_sort"
+                android:visibility="gone" />
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

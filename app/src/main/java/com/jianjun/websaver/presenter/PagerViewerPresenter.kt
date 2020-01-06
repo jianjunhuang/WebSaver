@@ -61,7 +61,6 @@ class PagerViewerPresenter :
         }
         updated = true
         Observable.interval(3, TimeUnit.SECONDS)
-            .throttleFirst(3, TimeUnit.SECONDS)
             .observeOn(Schedulers.computation())
             .subscribeOn(Schedulers.computation())
             .flatMapCompletable {
