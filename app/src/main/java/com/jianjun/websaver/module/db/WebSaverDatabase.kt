@@ -1,8 +1,6 @@
 package com.jianjun.websaver.module.db
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -15,7 +13,7 @@ import com.jianjun.websaver.module.db.entity.TagsMapper
 /**
  * Created by jianjunhuang on 10/26/19.
  */
-@Database(entities = [Pager::class, Tag::class, TagsMapper::class], version = 1)
+@Database(entities = [Pager::class, Tag::class, TagsMapper::class], version = 2)
 abstract class WebSaverDatabase : RoomDatabase() {
 
     abstract fun pagerDao(): PagerDao
@@ -41,12 +39,13 @@ abstract class WebSaverDatabase : RoomDatabase() {
             ).addMigrations(migration1To2)
                 .build()
 
-        val migration1To2 = object : Migration(1, 2) {
+        private val migration1To2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                val values: ContentValues = ContentValues()
-                values.put("position", 0)
-                values.put("isRead", false)
-                database.update("Pager", SQLiteDatabase.CONFLICT_FAIL, values, null, null)
+                database.beginTransaction()
+                database.execSQL("alter table 'Pager' add column 'position' INTEGER not null default 0;")
+                database.execSQL("alter table 'Pager' add column 'isRead' INTEGER not null default 0;")
+                database.setTransactionSuccessful()
+                database.endTransaction()
             }
         }
     }
