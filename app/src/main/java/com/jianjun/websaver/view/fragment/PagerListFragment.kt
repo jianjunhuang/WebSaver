@@ -80,14 +80,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         pagerAdapter = PagerListAdapter(null)
         pagerAdapter?.setOnItemCLickListener(this)
         pagerList?.adapter = pagerAdapter
-    }
-
-    override fun onResume() {
-        super.onResume()
         getPresenter()?.queryPagers(pagerTag)
     }
 
-    fun getTitle(): String {
-        return pagerTag
-    }
 }

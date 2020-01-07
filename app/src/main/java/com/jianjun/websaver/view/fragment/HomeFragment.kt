@@ -18,6 +18,7 @@ import com.jianjun.websaver.module.TAG_ALL
 import com.jianjun.websaver.module.TAG_READ
 import com.jianjun.websaver.module.TAG_UNREAD
 import com.jianjun.websaver.presenter.HomePresenter
+import com.jianjun.websaver.view.adapter.MultiFragmentAdapter
 
 /**
  * Created by jianjunhuang on 10/22/19.
@@ -26,7 +27,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeContact.IHomeView {
 
     private var viewpager: ViewPager? = null
     private var tablayout: TabLayout? = null
-    private val pagerListFragments: List<String>? = null
+    private var pagerAdapter: MultiFragmentAdapter<String, PagerListFragment>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,36 +42,20 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeContact.IHomeView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewpager?.adapter =
-            fragmentManager?.let {
-                TabAdapter(
-                    it,
-                    FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-                    pagerListFragments
-                )
-            }
+        pagerAdapter = MultiFragmentAdapter(childFragmentManager,
+            object : MultiFragmentAdapter.FragmentCreator<String, PagerListFragment> {
+                override fun create(data: String?, pos: Int): PagerListFragment {
+                    return PagerListFragment.create(data ?: TAG_ALL)
+                }
+
+                override fun getTitle(data: String?): String {
+                    return data ?: TAG_ALL
+                }
+
+            })
+        viewpager?.adapter = pagerAdapter
         tablayout?.setupWithViewPager(viewpager)
-    }
-
-    class TabAdapter(
-        fm: FragmentManager,
-        behavior: Int,
-        private val fragments: Array<PagerListFragment>
-    ) :
-        FragmentPagerAdapter(fm, behavior) {
-
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
-
-        override fun getCount(): Int {
-            return fragments.size
-        }
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return fragments[position].getTitle()
-        }
-
+        getPresenter()?.queryTags()
     }
 
     override fun onResume() {
@@ -82,6 +67,6 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeContact.IHomeView {
     }
 
     override fun onTags(tags: List<String>) {
-
+        pagerAdapter?.setDataList(tags)
     }
 }

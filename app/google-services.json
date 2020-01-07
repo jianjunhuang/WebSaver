@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "303198863146",
+    "firebase_url": "https://websaver-5c241.firebaseio.com",
+    "project_id": "websaver-5c241",
+    "storage_bucket": "websaver-5c241.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303198863146:android:af0f8fa0ea3d9a5e522853",
+        "android_client_info": {
+          "package_name": "com.jianjun.websaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303198863146-rghgbhddhs3r3itq0d2aqonfqv328go8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPxJgUfoMJbw_ulcZJoMQElhppVRIiHsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303198863146-rghgbhddhs3r3itq0d2aqonfqv328go8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
