@@ -2,6 +2,7 @@ package com.jianjun.websaver.module.db.entity
 
 import androidx.room.Entity
 import androidx.room.Ignore
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlin.collections.ArrayList
 
