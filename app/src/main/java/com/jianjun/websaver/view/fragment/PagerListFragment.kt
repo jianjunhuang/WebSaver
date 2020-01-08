@@ -16,6 +16,7 @@ import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerListPresenter
 import com.jianjun.websaver.view.activity.PagerViewerActivity
 import com.jianjun.websaver.view.adapter.PagerListAdapter
+import com.jianjun.websaver.view.widgets.MultiSelectedLayout
 
 /**
  * Created by jianjunhuang on 10/25/19.
@@ -50,7 +51,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
     }
 
     override fun onPagers(pagers: List<Pager>?) {
-        pagerAdapter?.refresh(pagers!!)
+        pagerAdapter.refresh(pagers!!)
     }
 
     override fun createPresenter(): PagerListPresenter {
@@ -58,7 +59,8 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
     }
 
     private var pagerList: RecyclerView? = null
-    private var pagerAdapter: PagerListAdapter? = null
+    private lateinit var pagerAdapter: PagerListAdapter
+    private var multiSelectedLayout: MultiSelectedLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,9 +79,21 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         super.onViewCreated(view, savedInstanceState)
         pagerList = view.findViewById(R.id.rv_pager)
         pagerList?.layoutManager = LinearLayoutManager(context)
-        pagerAdapter = PagerListAdapter(null)
-        pagerAdapter?.setOnItemCLickListener(this)
+        pagerAdapter = PagerListAdapter()
+        pagerAdapter.setOnItemCLickListener(this)
         pagerList?.adapter = pagerAdapter
+        multiSelectedLayout = view.findViewById(R.id.multi_selected_layout)
+        multiSelectedLayout?.setSelectAdapter(pagerAdapter)
+        multiSelectedLayout?.selectedListener = object : MultiSelectedLayout.MultiSelectedListener {
+            override fun onClose() {
+            }
+
+            override fun onDeleted() {
+            }
+
+            override fun onSelectedAll(selectedAll: Boolean) {
+            }
+        }
         getPresenter()?.queryPagers(pagerTag)
     }
 

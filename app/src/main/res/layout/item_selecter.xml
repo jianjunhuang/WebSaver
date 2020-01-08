@@ -8,6 +8,6 @@
         android:id="@+id/cb_select"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:padding="8dp" />
-    
+        android:layout_marginStart="16dp" />
+
 </LinearLayout>
