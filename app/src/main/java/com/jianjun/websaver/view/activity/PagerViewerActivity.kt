@@ -123,7 +123,6 @@ class PagerViewerActivity :
 
     override fun onResume() {
         super.onResume()
-        getPresenter()?.updateReadState()
     }
 
     override fun onClick(v: View?) {
