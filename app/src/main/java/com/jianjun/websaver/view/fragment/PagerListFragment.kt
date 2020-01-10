@@ -1,10 +1,14 @@
 package com.jianjun.websaver.view.fragment
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jianjun.websaver.R
@@ -39,14 +43,21 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
     private var pagerTag: String = TAG_ALL
 
 
-    override fun onItemClick(data: Pager, position: Int, adapter: RecyclerView.Adapter<*>) {
+    override fun onItemClick(
+        data: Pager,
+        view: View,
+        position: Int,
+        adapter: RecyclerView.Adapter<*>
+    ) {
         val intent = Intent()
-        context?.let {
+        activity?.let {
+            val compat: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeScaleUpAnimation(view, 0, 0, 0, 0)
             intent.setClass(
                 it, PagerViewerActivity::class.java
             )
             intent.putExtra(Intent.EXTRA_TEXT, data.url)
-            startActivity(intent)
+            ActivityCompat.startActivity(it, intent, compat.toBundle())
         }
     }
 

@@ -40,6 +40,7 @@ class PagerListAdapter :
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(
                 data,
+                it,
                 position,
                 this
             )

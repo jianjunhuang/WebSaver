@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.snackbar.Snackbar
 import com.jianjun.websaver.R
@@ -148,7 +149,7 @@ class PagerViewerActivity :
         if (webview?.canGoBack()!!) {
             webview?.goBack()
         } else {
-            super.onBackPressed()
+            ActivityCompat.finishAfterTransition(this)
         }
     }
 
@@ -168,7 +169,9 @@ class PagerViewerActivity :
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.iv_close -> finish()
+            R.id.iv_close -> {
+                ActivityCompat.finishAfterTransition(this)
+            }
             R.id.iv_save -> {
                 url?.let {
                     getPresenter()?.savePager(it, title, referrer)
