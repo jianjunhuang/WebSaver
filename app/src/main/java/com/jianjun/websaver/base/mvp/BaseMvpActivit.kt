@@ -27,4 +27,14 @@ open abstract class BaseMvpActivity<P : BasePresenter<*, *>> : AppCompatActivity
         super.onDestroy()
         presenter?.detach()
     }
+
+    override fun onResume() {
+        super.onResume()
+        presenter?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter?.onPause()
+    }
 }

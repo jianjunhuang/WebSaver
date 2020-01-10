@@ -38,6 +38,9 @@ abstract class BasePresenter<V : IView, M : IModel> {
         disposable.clear()
     }
 
+    open fun onResume() {}
+
+    open fun onPause() {}
 
     abstract inner class Observer<T> : io.reactivex.Observer<T> {
         override fun onComplete() {
