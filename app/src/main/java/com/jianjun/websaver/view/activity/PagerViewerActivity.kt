@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jianjun.websaver.R
 import com.jianjun.websaver.base.mvp.BaseMvpActivity
 import com.jianjun.websaver.contact.PagerViewerContact
+import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerViewerPresenter
 import com.jianjun.websaver.webview.MWebViewChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -33,6 +34,15 @@ class PagerViewerActivity :
         Snackbar.make(webview!!, reason, Snackbar.LENGTH_SHORT).show()
     }
 
+    override fun onStateUpdate(pager: Pager?) {
+        if (pager == null) {
+            //todo
+        } else {
+            readStateImg?.setImageResource(if (pager.isRead) R.drawable.ic_done_all else R.drawable.ic_done)
+        }
+    }
+
+
     override fun createPresenter(): PagerViewerPresenter? {
         return PagerViewerPresenter()
     }
@@ -43,6 +53,8 @@ class PagerViewerActivity :
     var title: String? = null
     var url: String? = null
     var referrer: String? = null
+    var readStateImg: ImageView? = null
+    var saveImg: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +63,11 @@ class PagerViewerActivity :
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         progressBar = findViewById(R.id.progress)
+        saveImg = findViewById(R.id.iv_save)
+        saveImg?.setOnClickListener(this)
+        findViewById<ImageView>(R.id.iv_close).setOnClickListener(this)
+        readStateImg = findViewById(R.id.iv_read_state)
+        readStateImg?.setOnClickListener(this)
 
         setupWebView()
 
@@ -59,14 +76,12 @@ class PagerViewerActivity :
         else
             intent.getStringExtra(Intent.EXTRA_TEXT)
 
-        getPresenter()?.loadCache(url.toString())
         webview?.loadUrl(url.toString())
 
         referrer = getReferrer()?.authority
         toolbar?.subtitle = "From $referrer"
+        getPresenter()?.loadCache(url.toString())
 
-        findViewById<ImageView>(R.id.iv_save).setOnClickListener(this)
-        findViewById<ImageView>(R.id.iv_close).setOnClickListener(this)
     }
 
     private fun setupWebView() {
@@ -130,6 +145,11 @@ class PagerViewerActivity :
             R.id.iv_save -> {
                 url?.let {
                     getPresenter()?.savePager(it, title, referrer)
+                }
+            }
+            R.id.iv_read_state -> {
+                url?.let {
+                    getPresenter()?.updateReadState(it, title, referrer)
                 }
             }
         }

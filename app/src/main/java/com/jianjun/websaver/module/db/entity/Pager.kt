@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 data class Pager(
     @PrimaryKey var url: String,
     var title: String?,
-    var image: String?,
+    var image: String? = "",
     var source: String?,
     var createDate: Long,
     var isRead: Boolean = false,
