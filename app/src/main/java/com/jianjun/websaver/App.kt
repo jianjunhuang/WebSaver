@@ -2,6 +2,7 @@ package com.jianjun.websaver
 
 import android.app.Application
 import androidx.multidex.MultiDexApplication
+import com.didichuxing.doraemonkit.DoraemonKit
 import com.jianjun.websaver.module.db.WebSaverDatabase
 import com.ycbjie.webviewlib.X5WebUtils
 
@@ -11,6 +12,10 @@ import com.ycbjie.webviewlib.X5WebUtils
 class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            DoraemonKit.install(this)
+            DoraemonKit.setAwaysShowMianIcon(false)
+        }
         X5WebUtils.init(this)
         WebSaverDatabase.init(this)
     }

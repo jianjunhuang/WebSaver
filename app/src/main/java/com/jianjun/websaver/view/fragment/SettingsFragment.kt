@@ -1,22 +1,16 @@
 package com.jianjun.websaver.view.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
+import com.didichuxing.doraemonkit.DoraemonKit
 import com.google.android.material.snackbar.Snackbar
+import com.jianjun.websaver.BuildConfig
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.BaseFragment
 import com.jianjun.websaver.contact.SettingsContact
 import com.jianjun.websaver.presenter.SettingsPresenter
 import com.jianjun.websaver.utils.CSVUtils
-import io.reactivex.CompletableObserver
-import io.reactivex.functions.Action
-import io.reactivex.functions.Function
 
 /**
  * Created by jianjunhuang on 10/22/19.
@@ -47,19 +41,27 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
             exportPreference -> {
                 presenter.exportData(csvUtils)
             }
+            debugModeSwitch -> {
+                DoraemonKit.show()
+            }
         }
         return true
     }
 
     private var importPreference: Preference? = null
     private var exportPreference: Preference? = null
+    private var debugModeSwitch: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.fragment_settings, rootKey)
-        importPreference = findPreference<Preference>(getString(R.string.settings_key_import))
+        importPreference = findPreference(getString(R.string.settings_key_import))
         exportPreference = findPreference(getString(R.string.settings_key_export))
+        debugModeSwitch = findPreference(getString(R.string.settings_debug_mode))
         importPreference?.onPreferenceClickListener = this
         exportPreference?.onPreferenceClickListener = this
+        debugModeSwitch?.onPreferenceClickListener = this
+
+        debugModeSwitch?.isVisible = BuildConfig.DEBUG
     }
 
     override fun onDataImport(isImported: Boolean, error: String) {
@@ -75,6 +77,5 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClic
             Snackbar.make(it, msg, Snackbar.LENGTH_SHORT).show()
         }
     }
-
 
 }
