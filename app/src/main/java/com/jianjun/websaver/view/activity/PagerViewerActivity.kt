@@ -15,7 +15,6 @@ import com.jianjun.websaver.base.mvp.BaseMvpActivity
 import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.presenter.PagerViewerPresenter
 import com.jianjun.websaver.webview.MWebViewChromeClient
-import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 import com.ycbjie.webviewlib.*
 
@@ -114,8 +113,8 @@ class PagerViewerActivity :
     override fun onDestroy() {
         super.onDestroy()
         webview?.let {
-            val viewgroup = it.parent as ViewGroup
-            viewgroup.removeView(it)
+            val viewGroup = it.parent as ViewGroup
+            viewGroup.removeView(it)
             it.stopLoading()
             it.destroy()
         }
