@@ -14,5 +14,6 @@ interface PagerViewerContact {
         fun onPagerSaved()
         fun onPagerSavedError(reason: String)
         fun onStateUpdate(pager: Pager?)
+        fun onPagerPosUpdate(position: Int)
     }
 }

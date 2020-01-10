@@ -18,6 +18,7 @@ class PagerViewerPresenter :
 
     private var pager: Pager? = null
     private var isRead = false
+    private var scrollPos = 0
 
     override fun createModel(): IPagerDbModel {
         return PagerDbModel()
@@ -30,6 +31,7 @@ class PagerViewerPresenter :
                 pager = it
                 isRead = it.isRead
                 getView().onStateUpdate(it)
+                HLog.i("Pager is save = $pager")
             }, {
                 HLog.e(it.toString(), tr = it)
                 getView().onStateUpdate(null)
@@ -46,6 +48,7 @@ class PagerViewerPresenter :
             p.title = title
             p.source = source
             p.isRead = isRead
+            p.position = scrollPos.toLong()
             getModel().savePager(p)?.compose(completableToMain())?.subscribe(
                 {
                     getView().onPagerSaved()
@@ -61,5 +64,24 @@ class PagerViewerPresenter :
     fun updateReadState(url: String, title: String?, source: String?) {
         this.isRead = !isRead
         savePager(url, title, source)
+    }
+
+    fun updateScrollPos(scrollPos: Int) {
+        this.scrollPos = scrollPos
+        HLog.i("scrollPos = $scrollPos")
+    }
+
+    fun webViewLoadFinish() {
+        pager?.let {
+            getView().onPagerPosUpdate(it.position.toInt())
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //todo save scroll pos
+        pager?.let {
+            savePager(it.url, it.title, it.source)
+        }
     }
 }

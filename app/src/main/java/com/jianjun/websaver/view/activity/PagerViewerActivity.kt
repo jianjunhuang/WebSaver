@@ -2,13 +2,16 @@ package com.jianjun.websaver.view.activity
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.NestedScrollView
 import com.google.android.material.snackbar.Snackbar
 import com.jianjun.websaver.R
 import com.jianjun.websaver.base.mvp.BaseMvpActivity
@@ -16,6 +19,7 @@ import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerViewerPresenter
 import com.jianjun.websaver.webview.MWebViewChromeClient
+import com.jianjun.websaver.webview.MWebViewClient
 import com.tencent.smtt.sdk.WebView
 import com.ycbjie.webviewlib.*
 
@@ -24,7 +28,8 @@ import com.ycbjie.webviewlib.*
  */
 
 class PagerViewerActivity :
-    BaseMvpActivity<PagerViewerPresenter>(), PagerViewerContact.IViewerView, View.OnClickListener {
+    BaseMvpActivity<PagerViewerPresenter>(), PagerViewerContact.IViewerView, View.OnClickListener,
+    NestedScrollView.OnScrollChangeListener {
 
     override fun onPagerSaved() {
         Snackbar.make(webview!!, "Save Successfully", Snackbar.LENGTH_SHORT).show()
@@ -42,19 +47,24 @@ class PagerViewerActivity :
         }
     }
 
+    override fun onPagerPosUpdate(position: Int) {
+        scrollView?.scrollTo(0, position)
+    }
+
 
     override fun createPresenter(): PagerViewerPresenter? {
         return PagerViewerPresenter()
     }
 
-    var webview: X5WebView? = null
-    var toolbar: Toolbar? = null
-    var progressBar: ProgressBar? = null
-    var title: String? = null
-    var url: String? = null
-    var referrer: String? = null
-    var readStateImg: ImageView? = null
-    var saveImg: ImageView? = null
+    private var webview: X5WebView? = null
+    private var toolbar: Toolbar? = null
+    private var progressBar: ProgressBar? = null
+    private var title: String? = null
+    private var url: String? = null
+    private var referrer: String? = null
+    private var readStateImg: ImageView? = null
+    private var saveImg: ImageView? = null
+    private var scrollView: NestedScrollView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +78,8 @@ class PagerViewerActivity :
         findViewById<ImageView>(R.id.iv_close).setOnClickListener(this)
         readStateImg = findViewById(R.id.iv_read_state)
         readStateImg?.setOnClickListener(this)
+        scrollView = findViewById(R.id.scroll_view)
+        scrollView?.setOnScrollChangeListener(this)
 
         setupWebView()
 
@@ -78,7 +90,11 @@ class PagerViewerActivity :
 
         webview?.loadUrl(url.toString())
 
-        referrer = getReferrer()?.authority
+        referrer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            getReferrer()?.authority
+        } else {
+            intent.getStringExtra(Intent.EXTRA_REFERRER)
+        }
         toolbar?.subtitle = "From $referrer"
         getPresenter()?.loadCache(url.toString())
 
@@ -104,7 +120,18 @@ class PagerViewerActivity :
             }
 
         }
-        webview?.x5WebViewClient?.setWebListener(listener)
+        val webViewClient = MWebViewClient(webview, this)
+        webViewClient.setWebListener(listener)
+        webViewClient.listener = object : MWebViewClient.Callback {
+            override fun onStart() {
+            }
+
+            override fun onStop() {
+                getPresenter()?.webViewLoadFinish()
+            }
+
+        }
+        webview?.webViewClient = webViewClient
         val webChromeClient = MWebViewChromeClient(webview, this)
         webChromeClient.setWebListener(listener)
         webChromeClient.setOnReceivedIconListener(object :
@@ -153,6 +180,16 @@ class PagerViewerActivity :
                 }
             }
         }
+    }
+
+    override fun onScrollChange(
+        v: NestedScrollView?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        getPresenter()?.updateScrollPos(scrollY)
     }
 
 }
