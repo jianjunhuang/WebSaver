@@ -3,14 +3,13 @@ package com.jianjun.websaver.view.fragment
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
 import com.didichuxing.doraemonkit.DoraemonKit
 import com.google.android.material.snackbar.Snackbar
-import com.jianjun.websaver.BuildConfig
+import com.jianjun.base.BuildConfig
 import com.jianjun.websaver.R
 import com.jianjun.websaver.contact.SettingsContact
 import com.jianjun.websaver.presenter.SettingsPresenter
-import com.jianjun.websaver.utils.CSVUtils
+import com.jianjun.base.utils.CSVUtils
 
 /**
  * Created by jianjunhuang on 10/22/19.

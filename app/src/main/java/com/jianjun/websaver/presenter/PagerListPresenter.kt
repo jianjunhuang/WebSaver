@@ -1,14 +1,9 @@
 package com.jianjun.websaver.presenter
 
-import com.jianjun.websaver.base.mvp.BasePresenter
+import com.jianjun.base.mvp.BasePresenter
 import com.jianjun.websaver.contact.PagerListContact
 import com.jianjun.websaver.module.*
-import com.jianjun.websaver.utils.flowableToMain
-import com.jianjun.websaver.utils.observableToMain
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
+import com.jianjun.base.utils.flowableToMain
 
 /**
  * Created by jianjunhuang on 11/26/19.

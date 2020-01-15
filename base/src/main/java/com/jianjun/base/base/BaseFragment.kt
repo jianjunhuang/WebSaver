@@ -1,0 +1,14 @@
+package com.jianjun.base.base
+
+import androidx.fragment.app.Fragment
+
+/**
+ * Created by jianjunhuang on 11/14/19.
+ */
+open class BaseFragment : Fragment() {
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+    }
+
+}

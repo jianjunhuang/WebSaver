@@ -1,0 +1,18 @@
+apply plugin: 'com.android.library'
+apply from: "../config.gradle"
+
+
+dependencies {
+    compileOnly rootProject.ext.denpendencies.kotlinStdLib
+    compileOnly rootProject.ext.denpendencies.appcompat
+    compileOnly rootProject.ext.denpendencies.ktx
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    compileOnly rootProject.ext.denpendencies.constraintLayout
+    // optional - RxJava support for Room
+    compileOnly rootProject.ext.denpendencies.rxJava
+    compileOnly rootProject.ext.denpendencies.rxAndroid
+    compileOnly rootProject.ext.denpendencies.recyclerview
+    compileOnly rootProject.ext.denpendencies.coordinatorLayout
+}

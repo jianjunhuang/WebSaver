@@ -1,6 +1,6 @@
 package com.jianjun.websaver.presenter
 
-import com.jianjun.websaver.base.mvp.BasePresenter
+import com.jianjun.base.mvp.BasePresenter
 import com.jianjun.websaver.contact.HomeContact
 import com.jianjun.websaver.module.*
 import io.reactivex.Observable

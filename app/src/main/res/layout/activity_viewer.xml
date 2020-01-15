@@ -47,7 +47,7 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:layout_behavior=".utils.ScrollAwareBehavior">
+        app:layout_behavior="com.jianjun.base.utils.ScrollAwareBehavior">
 
         <View
             android:layout_width="match_parent"

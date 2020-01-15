@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.BaseFragment
+import com.jianjun.base.base.BaseFragment
 
 /**
  * Created by jianjunhuang on 10/22/19.

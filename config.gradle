@@ -1,0 +1,43 @@
+//apply kotlin plugin
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+// default android config
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //default dependencies
+    dependencies {
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+        compileOnly rootProject.ext.denpendencies.kotlinStdLib
+        compileOnly rootProject.ext.denpendencies.appcompat
+        compileOnly rootProject.ext.denpendencies.ktx
+        testImplementation 'junit:junit:4.13'
+        androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+        androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+        // RxJava
+//        compileOnly rootProject.ext.denpendencies.rxJava
+        compileOnly rootProject.ext.denpendencies.rxAndroid
+    }
+
+
+}

@@ -12,15 +12,15 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.ItemClickListener
-import com.jianjun.websaver.base.mvp.BaseMvpFragment
+import com.jianjun.base.base.ItemClickListener
+import com.jianjun.base.mvp.BaseMvpFragment
+import com.jianjun.base.widgets.MultiSelectedLayout
 import com.jianjun.websaver.contact.PagerListContact
 import com.jianjun.websaver.module.TAG_ALL
 import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerListPresenter
 import com.jianjun.websaver.view.activity.PagerViewerActivity
 import com.jianjun.websaver.view.adapter.PagerListAdapter
-import com.jianjun.websaver.view.widgets.MultiSelectedLayout
 
 /**
  * Created by jianjunhuang on 10/25/19.

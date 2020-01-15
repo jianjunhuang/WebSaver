@@ -1,16 +1,13 @@
 package com.jianjun.websaver.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.BaseActivity
+import com.jianjun.base.base.BaseActivity
 import com.jianjun.websaver.view.fragment.HomeFragment
-import com.jianjun.websaver.view.fragment.NotesFragment
 import com.jianjun.websaver.view.fragment.SettingsFragment
-import com.jianjun.websaver.view.fragment.TagsFragment
 import com.jianjun.websaver.view.widgets.BottomNavigationView
 import com.jianjun.websaver.view.widgets.Navigation
 

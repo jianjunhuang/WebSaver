@@ -15,7 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.snackbar.Snackbar
 import com.jianjun.websaver.R
-import com.jianjun.websaver.base.mvp.BaseMvpActivity
+import com.jianjun.base.mvp.BaseMvpActivity
 import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerViewerPresenter

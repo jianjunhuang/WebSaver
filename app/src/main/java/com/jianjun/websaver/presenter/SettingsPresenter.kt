@@ -1,15 +1,14 @@
 package com.jianjun.websaver.presenter
 
-import android.util.Log
-import com.jianjun.websaver.base.mvp.BasePresenter
+import com.jianjun.base.mvp.BasePresenter
 import com.jianjun.websaver.contact.SettingsContact
 import com.jianjun.websaver.module.IPagerDbModel
 import com.jianjun.websaver.module.PagerDbModel
 import com.jianjun.websaver.module.db.entity.Pager
-import com.jianjun.websaver.utils.CSVUtils
-import com.jianjun.websaver.utils.completableToMain
-import com.jianjun.websaver.utils.flowableToMain
-import com.jianjun.websaver.utils.observableToMain
+import com.jianjun.base.utils.CSVUtils
+import com.jianjun.base.utils.completableToMain
+import com.jianjun.base.utils.flowableToMain
+import com.jianjun.base.utils.observableToMain
 import io.reactivex.functions.Function
 
 /**
