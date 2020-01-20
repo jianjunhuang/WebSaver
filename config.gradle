@@ -17,11 +17,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
+    signingConfigs {
+        release {
+            storeFile file("../keypath/release.jks")
+            storePassword "jianjunhuang"
+            keyAlias "jianjunhuang"
+            keyPassword "jianjunhuang"
+        }
+        debug {
+            storeFile file("../keypath/debug.jks")
+            storePassword "jianjunhuang"
+            keyAlias "jianjunhuang-debug"
+            keyPassword "jianjunhuang"
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 
