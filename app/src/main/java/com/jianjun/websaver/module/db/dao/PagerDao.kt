@@ -11,10 +11,10 @@ import io.reactivex.Flowable
 @Dao
 interface PagerDao {
 
-    @Query("SELECT * FROM pager")
+    @Query("SELECT * FROM pager order by createDate DESC")
     fun queryAllPagers(): Flowable<List<Pager>>
 
-    @Query("SELECT * FROM pager WHERE pager.url in (SELECT url FROM TagsMapper WHERE tag = :tag )")
+    @Query("SELECT * FROM pager WHERE pager.url in (SELECT url FROM TagsMapper WHERE tag = :tag ) order by createDate DESC")
     fun queryPagersByTag(tag: String): Flowable<List<Pager>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,6 +29,6 @@ interface PagerDao {
     @Query("SELECT * FROM pager WHERE pager.url = :url")
     fun getPagerByUrl(url: String): Flowable<Pager>
 
-    @Query("SELECT * FROM pager WHERE pager.isRead = :isRead")
+    @Query("SELECT * FROM pager WHERE pager.isRead = :isRead order by createDate DESC")
     fun queryPagerByReadStatus(isRead: Boolean): Flowable<List<Pager>>
 }

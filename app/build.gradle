@@ -54,6 +54,9 @@ dependencies {
     testImplementation rootProject.ext.denpendencies.roomTest
     kapt rootProject.ext.denpendencies.roomKapt
 
+    implementation rootProject.ext.denpendencies.rxJava
+    implementation rootProject.ext.denpendencies.rxAndroid
+
     // Extensions = ViewModel + LiveData
     implementation rootProject.ext.denpendencies.lifecycleExt
     kapt rootProject.ext.denpendencies.lifecycleKapt
