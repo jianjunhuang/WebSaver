@@ -1,8 +1,6 @@
 package com.jianjun.websaver.view.fragment
 
-import android.app.ActivityOptions
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +9,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jianjun.websaver.R
 import com.jianjun.base.base.ItemClickListener
 import com.jianjun.base.mvp.BaseMvpFragment
-import com.jianjun.base.widgets.MultiSelectedLayout
+import com.jianjun.base.multiseletced.MultiSelectedLayout
+import com.jianjun.websaver.R
 import com.jianjun.websaver.contact.PagerListContact
 import com.jianjun.websaver.module.TAG_ALL
 import com.jianjun.websaver.module.db.entity.Pager
@@ -95,16 +93,22 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         pagerList?.adapter = pagerAdapter
         multiSelectedLayout = view.findViewById(R.id.multi_selected_layout)
         multiSelectedLayout?.setSelectAdapter(pagerAdapter)
-        multiSelectedLayout?.selectedListener = object : MultiSelectedLayout.MultiSelectedListener {
-            override fun onClose() {
-            }
+        multiSelectedLayout?.selectedListener =
+            object : MultiSelectedLayout.MultiSelectedListener<Pager> {
+                override fun interceptDelete(pos: List<Int>, datas: List<Pager>): Boolean {
+                    return true
+                }
 
-            override fun onDeleted() {
-            }
+                override fun onRealDeleted(pos: List<Int>, datas: List<Pager>) {
+                }
 
-            override fun onSelectedAll(selectedAll: Boolean) {
+                override fun onClose() {
+                }
+
+
+                override fun onSelectedAll(selectedAll: Boolean) {
+                }
             }
-        }
         getPresenter()?.queryPagers(pagerTag)
     }
 

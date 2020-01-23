@@ -3,7 +3,7 @@ package com.jianjun.websaver.view.adapter
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.jianjun.base.adapter.MultiSelectListAdapter
+import com.jianjun.base.multiseletced.MultiSelectListAdapter
 import com.jianjun.websaver.R
 import com.jianjun.base.base.ItemClickListener
 import com.jianjun.websaver.module.db.entity.Pager

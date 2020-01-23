@@ -1,12 +1,12 @@
-package com.jianjun.base.adapter
+package com.jianjun.base.multiseletced
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.jianjun.base.R
+import com.jianjun.base.adapter.BaseAdapter
 
 abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectViewHolder> :
     BaseAdapter<D, V>(), View.OnLongClickListener {
@@ -15,6 +15,7 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
     var onSelectedListener: OnSelectedListener? = null
     private var showCheckBox = false
     private val checkboxOnClickListener = CheckboxOnClickListener()
+    internal var multiSelectedListener: MultiSelectedLayout.MultiSelectedListener<D>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): V {
         val layout =
@@ -51,8 +52,9 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
         val iterator = checkedList.iterator()
         val dataIterator = data.iterator()
         while (iterator.hasNext() && dataIterator.hasNext()) {
-            if (iterator.next()) {
-                dataIterator.next()
+            val selected = iterator.next()
+            dataIterator.next()
+            if (selected) {
                 iterator.remove()
                 dataIterator.remove()
             }

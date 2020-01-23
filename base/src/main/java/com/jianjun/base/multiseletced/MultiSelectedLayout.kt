@@ -1,12 +1,14 @@
-package com.jianjun.base.widgets
+package com.jianjun.base.multiseletced
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import com.jianjun.base.R
-import com.jianjun.base.adapter.MultiSelectListAdapter
 
 class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
@@ -14,7 +16,7 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
     private var selectedNumTV: TextView
     private var delImg: ImageView
     private var closeImg: ImageView
-    var selectedListener: MultiSelectedListener? = null
+    var selectedListener: MultiSelectedListener<*>? = null
     private var adapter: MultiSelectListAdapter<*, *>? = null
     private var isSelectedAll = false
 
@@ -36,16 +38,23 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
         }
 
         delImg.setOnClickListener {
-            selectedListener?.onDeleted()
-            adapter?.delItem()
+            if (selectedListener != null) {
+                adapter?.delItem()
+            }
+            close()
         }
         closeImg.setOnClickListener {
-            selectedListener?.onClose()
-            dismiss()
-            adapter?.showCheckBox(false)
+            close()
         }
         dismiss()
     }
+
+    private fun close() {
+        selectedListener?.onClose()
+        dismiss()
+        adapter?.showCheckBox(false)
+    }
+
 
     fun setSelectAdapter(adapter: MultiSelectListAdapter<*, *>) {
         this.adapter = adapter
@@ -80,9 +89,10 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
         visibility = View.VISIBLE
     }
 
-    interface MultiSelectedListener {
+    interface MultiSelectedListener<T> {
         fun onClose()
-        fun onDeleted()
+        fun onRealDeleted(pos: List<Int>, datas: List<T>)
         fun onSelectedAll(selectedAll: Boolean)
+        fun interceptDelete(pos: List<Int>, datas: List<T>): Boolean
     }
 }
