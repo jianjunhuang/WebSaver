@@ -65,6 +65,14 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         pagerAdapter.refresh(pagers!!)
     }
 
+    override fun onDeletedSuccess() {
+        showSnack("pagers delete success")
+    }
+
+    override fun onDeletedFailed(reason: String) {
+        showSnack("pagers delete failed: $reason")
+    }
+
     override fun createPresenter(): PagerListPresenter {
         return PagerListPresenter()
     }
@@ -113,7 +121,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
                 }
 
                 override fun onRealDeleted(checkItems: ArrayMap<Int, Pager>) {
-                    //todo delete real
+                    getPresenter()?.deletePagers(checkItems)
                 }
 
                 override fun interceptDelete(checkItems: ArrayMap<Int, Pager>): Boolean {

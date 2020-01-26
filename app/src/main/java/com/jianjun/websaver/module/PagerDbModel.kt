@@ -34,6 +34,10 @@ class PagerDbModel : IPagerDbModel {
         return WebSaverDatabase.getInstance()?.pagerDao()?.queryPagerByReadStatus(isRead)
     }
 
+    override fun deletePagers(pagers: List<Pager>): Completable? {
+        return WebSaverDatabase.getInstance()?.pagerDao()?.deletePagers(pagers)
+    }
+
     override fun queryPagers(): Flowable<List<Pager>>? {
         return WebSaverDatabase.getInstance()?.pagerDao()?.queryAllPagers()
     }

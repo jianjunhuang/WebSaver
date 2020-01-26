@@ -52,6 +52,9 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
     private fun realDelItems() {
         val dataIterator = data.iterator()
         var index = 0
+        multiSelectedListener?.let {
+            it.onRealDeleted(checkedItems)
+        }
         while (dataIterator.hasNext()) {
             dataIterator.next()
             if (checkedItems.containsKey(index)) {
@@ -107,7 +110,11 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
         override fun onClick(v: View?) {
             val checkBox = v as CheckBox
             val pos: Int = v.tag as Int
-            checkedItems[pos] = data[pos]
+            if (checkBox.isChecked) {
+                checkedItems[pos] = data[pos]
+            } else {
+                checkedItems.remove(pos)
+            }
             selectedListenerCallback(checkBox, pos)
         }
     }

@@ -9,6 +9,8 @@ import com.jianjun.websaver.module.db.entity.Pager
 interface PagerListContact {
     interface IPagersView : IView {
         fun onPagers(pagers: List<Pager>?)
+        fun onDeletedSuccess()
+        fun onDeletedFailed(reason: String)
     }
 
 }
