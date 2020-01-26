@@ -2,9 +2,11 @@ package com.jianjun.websaver.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +41,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
     }
 
     private var pagerTag: String = TAG_ALL
-
+    private lateinit var sureAlertDialog: AlertDialog
 
     override fun onItemClick(
         data: Pager,
@@ -69,7 +71,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
 
     private var pagerList: RecyclerView? = null
     private lateinit var pagerAdapter: PagerListAdapter
-    private var multiSelectedLayout: MultiSelectedLayout? = null
+    private var multiSelectedLayout: MultiSelectedLayout<Pager>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,12 +97,6 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         multiSelectedLayout?.setSelectAdapter(pagerAdapter)
         multiSelectedLayout?.selectedListener =
             object : MultiSelectedLayout.MultiSelectedListener<Pager> {
-                override fun interceptDelete(pos: List<Int>, datas: List<Pager>): Boolean {
-                    return true
-                }
-
-                override fun onRealDeleted(pos: List<Int>, datas: List<Pager>) {
-                }
 
                 override fun onClose() {
                 }
@@ -108,8 +104,30 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
 
                 override fun onSelectedAll(selectedAll: Boolean) {
                 }
+
+                override fun onDeletedClicked(checkItems: ArrayMap<Int, Pager>): Boolean {
+                    //show dialog
+                    sureAlertDialog.setMessage("Are you sure remove these ${checkItems.size} pagers?")
+                    sureAlertDialog.show()
+                    return true
+                }
+
+                override fun onRealDeleted(checkItems: ArrayMap<Int, Pager>) {
+                    //todo delete real
+                }
+
+                override fun interceptDelete(checkItems: ArrayMap<Int, Pager>): Boolean {
+                    return false
+                }
             }
         getPresenter()?.queryPagers(pagerTag)
+        sureAlertDialog =
+            AlertDialog.Builder(view.context).setTitle("Tips")
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }.setPositiveButton("Yes") { _, _ ->
+                    multiSelectedLayout?.delete()
+                }.create()
     }
 
 }
