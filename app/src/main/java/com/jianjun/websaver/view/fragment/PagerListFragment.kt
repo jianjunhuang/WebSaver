@@ -52,7 +52,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         val intent = Intent()
         activity?.let {
             val compat: ActivityOptionsCompat =
-                ActivityOptionsCompat.makeScaleUpAnimation(view, 0, 0, 0, 0)
+                ActivityOptionsCompat.makeScaleUpAnimation(view, view.width, 0, 0, 0)
             intent.setClass(
                 it, PagerViewerActivity::class.java
             )
