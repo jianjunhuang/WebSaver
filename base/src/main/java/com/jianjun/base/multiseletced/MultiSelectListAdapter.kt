@@ -1,5 +1,6 @@
 package com.jianjun.base.multiseletced
 
+import android.util.ArrayMap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.jianjun.base.adapter.BaseAdapter
 abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectViewHolder> :
     BaseAdapter<D, V>(), View.OnLongClickListener {
 
-    open var checkedList: MutableList<Boolean> = ArrayList()
+    internal val checkedItems: ArrayMap<Int, D> = ArrayMap()
     var onSelectedListener: OnSelectedListener? = null
     private var showCheckBox = false
     private val checkboxOnClickListener = CheckboxOnClickListener()
@@ -31,8 +32,8 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
 
     override fun onBindViewHolder(holder: V, position: Int) {
         holder.checkBox.visibility = if (showCheckBox) View.VISIBLE else View.GONE
-        if (checkedList.isNotEmpty()) {
-            holder.checkBox.isChecked = checkedList[position]
+        if (checkedItems.isNotEmpty()) {
+            holder.checkBox.isChecked = checkedItems.contains(position)
         }
         holder.checkBox.setOnClickListener(checkboxOnClickListener)
         holder.checkBox.tag = position
@@ -41,25 +42,40 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
     }
 
     fun selectAll(selectAll: Boolean) {
-        data.forEachIndexed { index, b ->
-            checkedList[index] = selectAll
+        data.forEachIndexed { index, data ->
+            checkedItems[index] = data
         }
         notifyItemRangeChanged(0, data.size)
-        onSelectedListener?.onSelectedRate(itemCount, checkedList.count { it })
+        onSelectedListener?.onSelectedRate(itemCount, checkedItems.size)
+    }
+
+    private fun realDelItems() {
+        val dataIterator = data.iterator()
+        var index = 0
+        multiSelectedListener?.let {
+            it.onRealDeleted(checkedItems)
+        }
+        while (dataIterator.hasNext()) {
+            dataIterator.next()
+            if (checkedItems.containsKey(index)) {
+                dataIterator.remove()
+                checkedItems.remove(index)
+            }
+            index++
+        }
+        notifyDataSetChanged()
     }
 
     fun delItem() {
-        val iterator = checkedList.iterator()
-        val dataIterator = data.iterator()
-        while (iterator.hasNext() && dataIterator.hasNext()) {
-            val selected = iterator.next()
-            dataIterator.next()
-            if (selected) {
-                iterator.remove()
-                dataIterator.remove()
+        if (multiSelectedListener == null) {
+            realDelItems()
+        }
+        multiSelectedListener?.let {
+            if (!it.interceptDelete(checkedItems)) {
+                realDelItems()
             }
         }
-        notifyDataSetChanged()
+        onSelectedListener?.onSelectedRate(itemCount, checkedItems.size)
     }
 
 
@@ -67,8 +83,7 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
         showCheckBox = show
         onSelectedListener?.onShow(show)
         if (!show) {
-            for ((index, check) in checkedList.withIndex())
-                checkedList[index] = false
+            checkedItems.clear()
         }
         notifyDataSetChanged()
     }
@@ -79,8 +94,7 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
     }
 
     override fun refresh(data: List<D>) {
-        checkedList.clear()
-        repeat(data.size) { checkedList.add(false) }
+        checkedItems.clear()
         super.refresh(data)
     }
 
@@ -96,11 +110,10 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
         override fun onClick(v: View?) {
             val checkBox = v as CheckBox
             val pos: Int = v.tag as Int
-
-            if (checkedList.size < pos) {
-                checkedList.add(pos, checkBox.isChecked)
+            if (checkBox.isChecked) {
+                checkedItems[pos] = data[pos]
             } else {
-                checkedList[pos] = checkBox.isChecked
+                checkedItems.remove(pos)
             }
             selectedListenerCallback(checkBox, pos)
         }
@@ -108,7 +121,7 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
 
     fun selectedListenerCallback(checkBox: CheckBox, pos: Int) {
         onSelectedListener?.onSelected(checkBox, pos, checkBox.isChecked)
-        onSelectedListener?.onSelectedRate(itemCount, checkedList.count { it })
+        onSelectedListener?.onSelectedRate(itemCount, checkedItems.size)
     }
 
     interface OnSelectedListener {

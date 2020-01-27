@@ -1,6 +1,7 @@
 package com.jianjun.base.multiseletced
 
 import android.content.Context
+import android.util.ArrayMap
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +11,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.jianjun.base.R
 
-class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+class MultiSelectedLayout<D>(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs) {
 
     private var selectAllCb: CheckBox
     private var selectedNumTV: TextView
     private var delImg: ImageView
     private var closeImg: ImageView
-    var selectedListener: MultiSelectedListener<*>? = null
-    private var adapter: MultiSelectListAdapter<*, *>? = null
+    var selectedListener: MultiSelectedListener<D>? = null
+        set(listener) {
+            field = listener
+            adapter?.multiSelectedListener = listener
+        }
+    private var adapter: MultiSelectListAdapter<D, *>? = null
     private var isSelectedAll = false
 
     init {
@@ -38,10 +44,16 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
         }
 
         delImg.setOnClickListener {
-            if (selectedListener != null) {
+            if (selectedListener == null) {
                 adapter?.delItem()
             }
-            close()
+            selectedListener?.let { listener ->
+                adapter?.let {
+                    if (!listener.onDeletedClicked(it.checkedItems)) {
+                        adapter?.delItem()
+                    }
+                }
+            }
         }
         closeImg.setOnClickListener {
             close()
@@ -56,7 +68,7 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
     }
 
 
-    fun setSelectAdapter(adapter: MultiSelectListAdapter<*, *>) {
+    fun setSelectAdapter(adapter: MultiSelectListAdapter<D, *>) {
         this.adapter = adapter
         adapter.onSelectedListener = object : MultiSelectListAdapter.OnSelectedListener {
             override fun onSelected(checkBox: CheckBox, pos: Int, selected: Boolean) {
@@ -79,6 +91,9 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
             }
 
         }
+        selectedListener?.let {
+            adapter.multiSelectedListener = selectedListener
+        }
     }
 
     fun dismiss() {
@@ -89,10 +104,18 @@ class MultiSelectedLayout(context: Context, attrs: AttributeSet?) : FrameLayout(
         visibility = View.VISIBLE
     }
 
-    interface MultiSelectedListener<T> {
+    /**
+     * delete selected item
+     */
+    fun delete() {
+        adapter?.delItem()
+    }
+
+    interface MultiSelectedListener<D> {
         fun onClose()
-        fun onRealDeleted(pos: List<Int>, datas: List<T>)
+        fun onDeletedClicked(checkItems: ArrayMap<Int, D>): Boolean
+        fun onRealDeleted(checkItems: ArrayMap<Int, D>)
         fun onSelectedAll(selectedAll: Boolean)
-        fun interceptDelete(pos: List<Int>, datas: List<T>): Boolean
+        fun interceptDelete(checkItems: ArrayMap<Int, D>): Boolean
     }
 }

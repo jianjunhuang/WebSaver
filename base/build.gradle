@@ -15,4 +15,5 @@ dependencies {
     compileOnly rootProject.ext.denpendencies.rxAndroid
     compileOnly rootProject.ext.denpendencies.recyclerview
     compileOnly rootProject.ext.denpendencies.coordinatorLayout
+    compileOnly rootProject.ext.denpendencies.material
 }
