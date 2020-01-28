@@ -50,4 +50,9 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnSelectedListener {
         transition.commit()
         showFragment(0)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fragments.clear()
+    }
 }

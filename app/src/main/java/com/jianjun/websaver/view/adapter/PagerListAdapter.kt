@@ -17,11 +17,6 @@ class PagerListAdapter :
     MultiSelectListAdapter<Pager, PagerListAdapter.PagersViewHolder>() {
 
     private val dateFormatter = SimpleDateFormat("yyyy/MM/dd HH:mm")
-    private var onItemClickListener: ItemClickListener<Pager>? = null
-
-    fun setOnItemCLickListener(onItemClickListener: ItemClickListener<Pager>) {
-        this.onItemClickListener = onItemClickListener
-    }
 
     class PagersViewHolder(id: Int, parent: ViewGroup) : MultiSelectViewHolder(id, parent) {
         var title: TextView = itemView.findViewById(R.id.tv_title)
@@ -38,14 +33,6 @@ class PagerListAdapter :
     override fun convert(holder: PagersViewHolder, data: Pager, position: Int) {
         holder.title.text = data.title
         holder.date.text = dateFormatter.format(Date(data.createDate))
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(
-                data,
-                it,
-                position,
-                this
-            )
-        }
         val context = holder.itemView.context
         if (data.isRead) {
             val colorRead = ContextCompat.getColor(context, R.color.colorRead)

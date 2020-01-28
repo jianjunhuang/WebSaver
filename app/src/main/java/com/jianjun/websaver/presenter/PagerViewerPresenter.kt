@@ -61,9 +61,13 @@ class PagerViewerPresenter :
         }
     }
 
-    fun updateReadState(url: String, title: String?, source: String?) {
+    fun updateReadState() {
         this.isRead = !isRead
-        savePager(url, title, source)
+        pager?.let {
+            it.isRead = isRead
+            getModel().savePager(it)?.compose(completableToMain())?.subscribe()
+            getView().onStateUpdate(it)
+        }
     }
 
     fun updateScrollPos(scrollPos: Int) {
@@ -77,11 +81,21 @@ class PagerViewerPresenter :
         }
     }
 
+    private fun updatePager() {
+        pager?.let {
+            getModel().savePager(it)?.compose(completableToMain())?.subscribe()
+        }
+    }
+
+    private fun updateReadPos() {
+        pager?.let { p ->
+            p.position = scrollPos.toLong()
+            updatePager()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
-        //todo save scroll pos
-        pager?.let {
-            savePager(it.url, it.title, it.source)
-        }
+        updateReadPos()
     }
 }

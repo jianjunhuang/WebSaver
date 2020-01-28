@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jianjun.base.adapter.BaseAdapter
 import com.jianjun.base.base.ItemClickListener
 import com.jianjun.base.mvp.BaseMvpFragment
 import com.jianjun.base.multiseletced.MultiSelectedLayout
@@ -26,7 +27,7 @@ import com.jianjun.websaver.view.adapter.PagerListAdapter
  * Created by jianjunhuang on 10/25/19.
  */
 class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContact.IPagersView,
-    ItemClickListener<Pager> {
+    BaseAdapter.OnItemClickListener<PagerListAdapter.PagersViewHolder, Pager> {
 
     companion object {
         const val KEY_TAG = "key_tag"
@@ -42,24 +43,6 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
 
     private var pagerTag: String = TAG_ALL
     private lateinit var sureAlertDialog: AlertDialog
-
-    override fun onItemClick(
-        data: Pager,
-        view: View,
-        position: Int,
-        adapter: RecyclerView.Adapter<*>
-    ) {
-        val intent = Intent()
-        activity?.let {
-            val compat: ActivityOptionsCompat =
-                ActivityOptionsCompat.makeScaleUpAnimation(view, view.width, 0, 0, 0)
-            intent.setClass(
-                it, PagerViewerActivity::class.java
-            )
-            intent.putExtra(Intent.EXTRA_TEXT, data.url)
-            ActivityCompat.startActivity(it, intent, compat.toBundle())
-        }
-    }
 
     override fun onPagers(pagers: List<Pager>?) {
         pagerAdapter.refresh(pagers!!)
@@ -99,7 +82,7 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
         pagerList = view.findViewById(R.id.rv_pager)
         pagerList?.layoutManager = LinearLayoutManager(context)
         pagerAdapter = PagerListAdapter()
-        pagerAdapter.setOnItemCLickListener(this)
+        pagerAdapter.onItemClickListener = this
         pagerList?.adapter = pagerAdapter
         multiSelectedLayout = view.findViewById(R.id.multi_selected_layout)
         multiSelectedLayout?.setSelectAdapter(pagerAdapter)
@@ -136,6 +119,25 @@ class PagerListFragment : BaseMvpFragment<PagerListPresenter>(), PagerListContac
                 }.setPositiveButton("Yes") { _, _ ->
                     multiSelectedLayout?.delete()
                 }.create()
+    }
+
+    override fun onClick(holder: PagerListAdapter.PagersViewHolder, pos: Int, data: Pager) {
+        val intent = Intent()
+        activity?.let {
+            val compat: ActivityOptionsCompat =
+                ActivityOptionsCompat.makeScaleUpAnimation(
+                    holder.itemView,
+                    holder.itemView.width,
+                    0,
+                    0,
+                    0
+                )
+            intent.setClass(
+                it, PagerViewerActivity::class.java
+            )
+            intent.putExtra(Intent.EXTRA_TEXT, data.url)
+            ActivityCompat.startActivity(it, intent, compat.toBundle())
+        }
     }
 
 }

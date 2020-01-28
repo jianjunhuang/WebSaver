@@ -2,23 +2,21 @@ package com.jianjun.websaver.view.activity
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
-import com.google.android.material.snackbar.Snackbar
+import androidx.databinding.DataBindingUtil
 import com.jianjun.websaver.R
 import com.jianjun.base.mvp.BaseMvpActivity
 import com.jianjun.websaver.contact.PagerViewerContact
+import com.jianjun.websaver.databinding.ActivityViewerBinding
 import com.jianjun.websaver.module.db.entity.Pager
 import com.jianjun.websaver.presenter.PagerViewerPresenter
+import com.jianjun.websaver.view.fragment.PagerViewerBottomFragment
 import com.jianjun.websaver.webview.MWebViewChromeClient
 import com.jianjun.websaver.webview.MWebViewClient
 import com.tencent.smtt.sdk.WebView
@@ -33,23 +31,23 @@ class PagerViewerActivity :
     NestedScrollView.OnScrollChangeListener {
 
     override fun onPagerSaved() {
-        Snackbar.make(webview!!, "Save Successfully", Snackbar.LENGTH_SHORT).show()
+        showSnack(databinding.webView, "Save Successfully")
     }
 
     override fun onPagerSavedError(reason: String) {
-        Snackbar.make(webview!!, reason, Snackbar.LENGTH_SHORT).show()
+        showSnack(databinding.webView, reason)
     }
 
     override fun onStateUpdate(pager: Pager?) {
         if (pager == null) {
             //todo
         } else {
-            readStateImg?.setImageResource(if (pager.isRead) R.drawable.ic_done_all else R.drawable.ic_done)
+            databinding.ivReadState.setImageResource(if (pager.isRead) R.drawable.ic_done_all else R.drawable.ic_done)
         }
     }
 
     override fun onPagerPosUpdate(position: Int) {
-        scrollView?.scrollTo(0, position)
+        databinding.scrollView.scrollTo(0, position)
     }
 
 
@@ -57,30 +55,21 @@ class PagerViewerActivity :
         return PagerViewerPresenter()
     }
 
-    private var webview: X5WebView? = null
-    private var toolbar: Toolbar? = null
-    private var progressBar: ProgressBar? = null
     private var title: String? = null
     private var url: String? = null
     private var referrer: String? = null
-    private var readStateImg: ImageView? = null
-    private var saveImg: ImageView? = null
-    private var scrollView: NestedScrollView? = null
+    private lateinit var databinding: ActivityViewerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_viewer)
-        webview = findViewById(R.id.web_view)
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        progressBar = findViewById(R.id.progress)
-        saveImg = findViewById(R.id.iv_save)
-        saveImg?.setOnClickListener(this)
-        findViewById<ImageView>(R.id.iv_close).setOnClickListener(this)
-        readStateImg = findViewById(R.id.iv_read_state)
-        readStateImg?.setOnClickListener(this)
-        scrollView = findViewById(R.id.scroll_view)
-        scrollView?.setOnScrollChangeListener(this)
+        databinding = DataBindingUtil.setContentView(this, R.layout.activity_viewer)
+        databinding.lifecycleOwner = this
+        setSupportActionBar(databinding.toolbar)
+        databinding.ivSave.setOnClickListener(this)
+        databinding.ivClose.setOnClickListener(this)
+        databinding.ivReadState.setOnClickListener(this)
+        databinding.ivMore.setOnClickListener(this)
+        databinding.scrollView.setOnScrollChangeListener(this)
 
         setupWebView()
 
@@ -89,14 +78,14 @@ class PagerViewerActivity :
         else
             intent.getStringExtra(Intent.EXTRA_TEXT)
 
-        webview?.loadUrl(url.toString())
+        databinding.webView.loadUrl(url.toString())
 
         referrer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             getReferrer()?.authority
         } else {
             intent.getStringExtra(Intent.EXTRA_REFERRER)
         }
-        toolbar?.subtitle = "From $referrer"
+        databinding.toolbar.subtitle = "From $referrer"
         getPresenter()?.loadCache(url.toString())
 
     }
@@ -104,16 +93,16 @@ class PagerViewerActivity :
     private fun setupWebView() {
         val listener = object : InterWebListener {
             override fun showTitle(title: String?) {
-                toolbar?.title = title
+                databinding.toolbar.title = title
                 this@PagerViewerActivity.title = title
             }
 
             override fun hindProgressBar() {
-                progressBar?.visibility = View.GONE
+                databinding.progress.visibility = View.GONE
             }
 
             override fun startProgress(newProgress: Int) {
-                progressBar?.progress = newProgress
+                databinding.progress.progress = newProgress
             }
 
             override fun showErrorView(type: Int) {
@@ -121,7 +110,7 @@ class PagerViewerActivity :
             }
 
         }
-        val webViewClient = MWebViewClient(webview, this)
+        val webViewClient = MWebViewClient(databinding.webView, this)
         webViewClient.setWebListener(listener)
         webViewClient.listener = object : MWebViewClient.Callback {
             override fun onStart() {
@@ -132,22 +121,22 @@ class PagerViewerActivity :
             }
 
         }
-        webview?.webViewClient = webViewClient
-        val webChromeClient = MWebViewChromeClient(webview, this)
+        databinding.webView.webViewClient = webViewClient
+        val webChromeClient = MWebViewChromeClient(databinding.webView, this)
         webChromeClient.setWebListener(listener)
         webChromeClient.setOnReceivedIconListener(object :
             MWebViewChromeClient.OnReceivedIconListener {
             override fun onReceivedIcon(webView: WebView?, bitmap: Bitmap?) {
-                toolbar?.logo = BitmapDrawable(resources, bitmap)
+                databinding.toolbar.logo = BitmapDrawable(resources, bitmap)
             }
 
         })
-        webview?.webChromeClient = webChromeClient
+        databinding.webView.webChromeClient = webChromeClient
     }
 
     override fun onBackPressed() {
-        if (webview?.canGoBack()!!) {
-            webview?.goBack()
+        if (databinding.webView?.canGoBack()!!) {
+            databinding.webView.goBack()
         } else {
             ActivityCompat.finishAfterTransition(this)
         }
@@ -155,7 +144,7 @@ class PagerViewerActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        webview?.let {
+        databinding.webView.let {
             val viewGroup = it.parent as ViewGroup
             viewGroup.removeView(it)
             it.stopLoading()
@@ -179,7 +168,13 @@ class PagerViewerActivity :
             }
             R.id.iv_read_state -> {
                 url?.let {
-                    getPresenter()?.updateReadState(it, title, referrer)
+                    getPresenter()?.updateReadState()
+                }
+            }
+            R.id.iv_more -> {
+                url?.let {
+                    PagerViewerBottomFragment.newInstance(it)
+                        .show(supportFragmentManager, PagerViewerBottomFragment.TAG)
                 }
             }
         }

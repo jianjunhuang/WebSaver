@@ -42,8 +42,12 @@ abstract class MultiSelectListAdapter<D, V : MultiSelectListAdapter.MultiSelectV
     }
 
     fun selectAll(selectAll: Boolean) {
-        data.forEachIndexed { index, data ->
-            checkedItems[index] = data
+        if (selectAll) {
+            data.forEachIndexed { index, data ->
+                checkedItems[index] = data
+            }
+        } else {
+            checkedItems.clear()
         }
         notifyItemRangeChanged(0, data.size)
         onSelectedListener?.onSelectedRate(itemCount, checkedItems.size)

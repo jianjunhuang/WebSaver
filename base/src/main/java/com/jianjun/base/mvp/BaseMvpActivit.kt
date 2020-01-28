@@ -2,11 +2,12 @@ package com.jianjun.base.mvp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.jianjun.base.base.BaseActivity
 
 /**
  * Created by jianjunhuang on 11/24/19.
  */
-open abstract class BaseMvpActivity<P : BasePresenter<*, *>> : AppCompatActivity(), IView {
+open abstract class BaseMvpActivity<P : BasePresenter<*, *>> : BaseActivity(), IView {
     private var presenter: P? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
