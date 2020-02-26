@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.jianjun.base.utils.SnackbarUtils
 import java.lang.ref.WeakReference
 
 /**
@@ -11,24 +12,18 @@ import java.lang.ref.WeakReference
  */
 open class BaseFragment : Fragment() {
 
-    private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weakReference = WeakReference<View>(view)
-        weakReference.get()?.let {
-//            snackbar = Snackbar.make(it, "", Snackbar.LENGTH_SHORT)
-        }
     }
 
     fun showSnack(msg: String) {
-//        snackbar?.setText(msg)?.show()
+        view?.let {
+            SnackbarUtils.showShort(it, msg)
+        }
     }
 
     fun showSnack(view: View, msg: String) {
-        val weakReference = WeakReference<View>(view)
-        weakReference.get()?.let {
-//            Snackbar.make(it, msg, Snackbar.LENGTH_SHORT).show()
-        }
+        SnackbarUtils.showShort(view, msg)
     }
 }

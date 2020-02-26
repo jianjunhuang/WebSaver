@@ -11,18 +11,15 @@ import java.lang.ref.WeakReference
  * Created by jianjunhuang on 11/14/19.
  */
 abstract class BaseActivity : AppCompatActivity() {
-    private var snackbar: Snackbar? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     fun showSnack(msg: String) {
+        SnackbarUtils.showShort(window.decorView, msg)
     }
 
     fun showSnack(view: View, msg: String) {
-        val weakReference = WeakReference<View>(view)
-        weakReference.get()?.let {
-            //            Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
-        }
+        SnackbarUtils.showShort(view, msg)
     }
 }
