@@ -16,4 +16,5 @@ dependencies {
     compileOnly rootProject.ext.denpendencies.recyclerview
     compileOnly rootProject.ext.denpendencies.coordinatorLayout
     compileOnly rootProject.ext.denpendencies.material
+    implementation 'androidx.annotation:annotation:1.1.0'
 }

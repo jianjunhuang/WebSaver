@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
-import androidx.databinding.DataBindingUtil
 import com.jianjun.websaver.R
 import com.jianjun.base.mvp.BaseMvpActivity
 import com.jianjun.websaver.contact.PagerViewerContact
@@ -62,8 +61,7 @@ class PagerViewerActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        databinding = DataBindingUtil.setContentView(this, R.layout.activity_viewer)
-        databinding.lifecycleOwner = this
+        databinding = ActivityViewerBinding.inflate(layoutInflater)
         setSupportActionBar(databinding.toolbar)
         databinding.ivSave.setOnClickListener(this)
         databinding.ivClose.setOnClickListener(this)

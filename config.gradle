@@ -56,7 +56,10 @@ android {
         // RxJava
 //        compileOnly rootProject.ext.denpendencies.rxJava
         compileOnly rootProject.ext.denpendencies.rxAndroid
+//        implementation 'androidx.annotation:annotation:1.1.0'
     }
 
-
+    viewBinding {
+        enabled = true
+    }
 }
