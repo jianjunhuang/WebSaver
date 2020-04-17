@@ -9,9 +9,6 @@ android {
     defaultConfig {
         multiDexEnabled true
     }
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
