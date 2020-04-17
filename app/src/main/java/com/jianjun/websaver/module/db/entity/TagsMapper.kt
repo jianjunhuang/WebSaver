@@ -1,5 +1,6 @@
 package com.jianjun.websaver.module.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -21,6 +22,9 @@ import androidx.room.PrimaryKey
     )]
 )
 data class TagsMapper(
-    @PrimaryKey(autoGenerate = true) var key: Int, var tag: String?,
+    @PrimaryKey(autoGenerate = true) var key: Int,
+    @ColumnInfo(index = true)
+    var tag: String?,
+    @ColumnInfo(index = true)
     var url: String?
 )

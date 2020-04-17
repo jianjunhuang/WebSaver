@@ -7,4 +7,7 @@
     <string name="settings_category_data">Data</string>
     <string name="select_all">select All</string>
     <string name="settings_debug_mode">Debug Mode</string>
+    <string name="settings_debug_title">Debug</string>
+    <string name="settings_share_computer">Browse on computer</string>
+    <string name="settings_share">Share</string>
 </resources>

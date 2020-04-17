@@ -1,6 +1,5 @@
 package com.jianjun.websaver.view.fragment
 
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
@@ -9,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -19,7 +17,6 @@ import com.jianjun.websaver.R
 import com.jianjun.websaver.databinding.FragmentPagerBottomBinding
 import com.jianjun.websaver.module.bean.PagerBottomBean
 import com.jianjun.websaver.view.adapter.PagerBottomAdapter
-import java.lang.Exception
 
 /**
  * Created by jianjunhuang on 1/27/20.
@@ -51,8 +48,7 @@ class PagerViewerBottomFragment : BottomSheetDialogFragment(),
         savedInstanceState: Bundle?
     ): View? {
         databinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_pager_bottom, null, false)
-        databinding.lifecycleOwner = this
+            FragmentPagerBottomBinding.inflate(inflater, null, false)
         return databinding.root
     }
 

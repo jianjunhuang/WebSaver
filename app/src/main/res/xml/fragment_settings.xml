@@ -11,8 +11,12 @@
             android:summary="@string/settings_summary_export"
             android:title="@string/settings_key_export" />
     </PreferenceCategory>
-
-    <PreferenceCategory android:title="Debug">
+    <PreferenceCategory android:title="@string/settings_share">
+        <Preference
+            android:key="@string/settings_share_computer"
+            android:title="@string/settings_share_computer" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_debug_title">
         <Preference
             android:key="@string/settings_debug_mode"
             android:title="@string/settings_debug_mode" />
