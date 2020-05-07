@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
-import com.jianjun.websaver.R
 import com.jianjun.base.mvp.BaseMvpActivity
+import com.jianjun.websaver.R
 import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.databinding.ActivityViewerBinding
 import com.jianjun.websaver.module.db.entity.Pager
@@ -19,7 +19,7 @@ import com.jianjun.websaver.view.fragment.PagerViewerBottomFragment
 import com.jianjun.websaver.webview.MWebViewChromeClient
 import com.jianjun.websaver.webview.MWebViewClient
 import com.tencent.smtt.sdk.WebView
-import com.ycbjie.webviewlib.*
+import com.ycbjie.webviewlib.InterWebListener
 
 /**
  * Created by jianjunhuang on 11/13/19.
@@ -62,6 +62,7 @@ class PagerViewerActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         databinding = ActivityViewerBinding.inflate(layoutInflater)
+        setContentView(databinding.root)
         setSupportActionBar(databinding.toolbar)
         databinding.ivSave.setOnClickListener(this)
         databinding.ivClose.setOnClickListener(this)
@@ -133,7 +134,7 @@ class PagerViewerActivity :
     }
 
     override fun onBackPressed() {
-        if (databinding.webView?.canGoBack()!!) {
+        if (databinding.webView.canGoBack()) {
             databinding.webView.goBack()
         } else {
             ActivityCompat.finishAfterTransition(this)
