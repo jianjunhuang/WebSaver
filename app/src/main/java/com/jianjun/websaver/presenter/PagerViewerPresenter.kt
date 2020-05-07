@@ -1,13 +1,13 @@
 package com.jianjun.websaver.presenter
 
 import com.jianjun.base.mvp.BasePresenter
+import com.jianjun.base.utils.HLog
+import com.jianjun.base.utils.completableToMain
+import com.jianjun.base.utils.flowableToMain
 import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.module.IPagerDbModel
 import com.jianjun.websaver.module.PagerDbModel
 import com.jianjun.websaver.module.db.entity.Pager
-import com.jianjun.base.utils.HLog
-import com.jianjun.base.utils.completableToMain
-import com.jianjun.base.utils.flowableToMain
 import java.util.*
 
 /**
@@ -16,7 +16,8 @@ import java.util.*
 class PagerViewerPresenter :
     BasePresenter<PagerViewerContact.IViewerView, IPagerDbModel>() {
 
-    private var pager: Pager? = null
+    var pager: Pager? = null
+        private set
     private var isRead = false
     private var scrollPos = 0
 
@@ -46,7 +47,6 @@ class PagerViewerPresenter :
         pager?.let { p ->
             p.url = url
             p.title = title
-            p.source = source
             p.isRead = isRead
             p.position = scrollPos.toLong()
             getModel().savePager(p)?.compose(completableToMain())?.subscribe(

@@ -3,6 +3,7 @@ package com.jianjun.websaver.view.activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,8 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
 import com.jianjun.base.mvp.BaseMvpActivity
+import com.jianjun.base.utils.SnackbarUtils
+import com.jianjun.base.utils.isHttp
 import com.jianjun.websaver.R
 import com.jianjun.websaver.contact.PagerViewerContact
 import com.jianjun.websaver.databinding.ActivityViewerBinding
@@ -30,18 +33,18 @@ class PagerViewerActivity :
     NestedScrollView.OnScrollChangeListener {
 
     override fun onPagerSaved() {
-        showSnack(databinding.webView, "Save Successfully")
+        SnackbarUtils.showShort(databinding.root, databinding.fabAction, "Save Successfully")
     }
 
     override fun onPagerSavedError(reason: String) {
-        showSnack(databinding.webView, reason)
+        SnackbarUtils.showShort(databinding.root, databinding.fabAction, reason)
     }
 
     override fun onStateUpdate(pager: Pager?) {
         if (pager == null) {
-            //todo
+            databinding.fabAction.setImageResource(R.drawable.ic_save)
         } else {
-            databinding.ivReadState.setImageResource(if (pager.isRead) R.drawable.ic_done_all else R.drawable.ic_done)
+            databinding.fabAction.setImageResource(if (pager.isRead) R.drawable.ic_done_all else R.drawable.ic_done)
         }
     }
 
@@ -63,13 +66,7 @@ class PagerViewerActivity :
         super.onCreate(savedInstanceState)
         databinding = ActivityViewerBinding.inflate(layoutInflater)
         setContentView(databinding.root)
-        setSupportActionBar(databinding.toolbar)
-        databinding.ivSave.setOnClickListener(this)
-        databinding.ivClose.setOnClickListener(this)
-        databinding.ivReadState.setOnClickListener(this)
-        databinding.ivMore.setOnClickListener(this)
-        databinding.scrollView.setOnScrollChangeListener(this)
-
+        initView()
         setupWebView()
 
         url = if (Intent.ACTION_VIEW == intent.action)
@@ -94,6 +91,15 @@ class PagerViewerActivity :
             override fun showTitle(title: String?) {
                 databinding.toolbar.title = title
                 this@PagerViewerActivity.title = title
+                url?.let { url ->
+                    getPresenter()?.pager?.let { pager ->
+                        title?.let {
+                            if (!it.isHttp() && it != pager.title) {
+                                getPresenter()?.savePager(url, it, null)
+                            }
+                        }
+                    }
+                }
             }
 
             override fun hindProgressBar() {
@@ -133,6 +139,47 @@ class PagerViewerActivity :
         databinding.webView.webChromeClient = webChromeClient
     }
 
+    private fun initView() {
+        setSupportActionBar(databinding.toolbar)
+        databinding.toolbar.setNavigationOnClickListener {
+            ActivityCompat.finishAfterTransition(this)
+        }
+        databinding.fabAction.setOnClickListener(this)
+        databinding.scrollView.setOnScrollChangeListener(this)
+        databinding.bottomBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_back -> {
+                    databinding.webView.goBack()
+                }
+                R.id.menu_forward -> {
+                    databinding.webView.goForward()
+                }
+                R.id.menu_share -> {
+                    val intent = Intent().apply {
+                        url?.let { url ->
+                            intent.data = Uri.parse(url)
+                        }
+                        action = Intent.ACTION_SEND
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, "Share")
+                        putExtra(Intent.EXTRA_TEXT, url)
+                    }
+                    startActivity(intent)
+                }
+                R.id.menu_browser -> {
+                    val intent = Intent().apply {
+                        url?.let { url ->
+                            intent.data = Uri.parse(url)
+                        }
+                        action = Intent.ACTION_VIEW
+                    }
+                    startActivity(intent)
+                }
+            }
+            return@setOnMenuItemClickListener true
+        }
+    }
+
     override fun onBackPressed() {
         if (databinding.webView.canGoBack()) {
             databinding.webView.goBack()
@@ -160,14 +207,13 @@ class PagerViewerActivity :
             R.id.iv_close -> {
                 ActivityCompat.finishAfterTransition(this)
             }
-            R.id.iv_save -> {
+            R.id.fab_action -> {
                 url?.let {
-                    getPresenter()?.savePager(it, title, referrer)
-                }
-            }
-            R.id.iv_read_state -> {
-                url?.let {
-                    getPresenter()?.updateReadState()
+                    if (getPresenter()?.pager == null) {
+                        getPresenter()?.savePager(it, title, referrer)
+                    } else {
+                        getPresenter()?.updateReadState()
+                    }
                 }
             }
             R.id.iv_more -> {

@@ -1,9 +1,7 @@
 package com.jianjun.base.utils
 
 import android.view.View
-import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
-import com.jianjun.base.R
 import java.lang.ref.WeakReference
 
 /**
@@ -55,6 +53,13 @@ class SnackbarUtils private constructor() {
 
         fun showShort(parent: View, text: String) {
             weakReference = WeakReference(Snackbar.make(parent, text, Snackbar.LENGTH_SHORT))
+            weakReference?.get()?.show()
+        }
+
+        fun showShort(parent: View, anchor: View, text: String) {
+            weakReference = WeakReference(
+                Snackbar.make(parent, text, Snackbar.LENGTH_SHORT).setAnchorView(anchor)
+            )
             weakReference?.get()?.show()
         }
     }

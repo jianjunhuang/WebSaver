@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_back"
+        android:icon="@drawable/ic_navigate_before_black"
+        android:title="back"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_forward"
+        android:icon="@drawable/ic_navigate_next_black"
+        android:title="forward"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_share"
+        android:title="share"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_browser"
+        android:icon="@drawable/ic_public"
+        android:title="browser"
+        app:showAsAction="always" />
 
 </menu>

@@ -2,6 +2,7 @@
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -20,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:navigationIcon="@drawable/ic_close"
             app:titleMarginStart="32dp" />
 
         <ProgressBar
@@ -41,75 +43,82 @@
             android:layout_height="match_parent" />
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="48dp"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:background="@color/white"-->
+    <!--        android:gravity="center_vertical"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_behavior="com.jianjun.base.utils.ScrollAwareBehavior">-->
+
+    <!--        <View-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="@color/colorDivider"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_close"-->
+    <!--            android:layout_width="48dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:scaleType="centerInside"-->
+    <!--            android:src="@drawable/ic_close"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/iv_read_state"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_save"-->
+    <!--            android:layout_width="48dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:scaleType="centerInside"-->
+    <!--            android:src="@drawable/ic_save"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/iv_more"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/iv_read_state" />-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_read_state"-->
+    <!--            android:layout_width="48dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:scaleType="centerInside"-->
+    <!--            android:src="@drawable/ic_done"-->
+    <!--            app:layout_constraintEnd_toStartOf="@+id/iv_save"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/iv_close" />-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_more"-->
+    <!--            android:layout_width="48dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:scaleType="centerInside"-->
+    <!--            android:src="@drawable/ic_more_vert"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintHorizontal_bias="0.5"-->
+    <!--            app:layout_constraintStart_toEndOf="@+id/iv_save" />-->
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        app:layout_behavior="com.jianjun.base.utils.ScrollAwareBehavior">
+        app:fabAlignmentMode="end"
+        app:hideOnScroll="true"
+        app:menu="@menu/menu_bottom_bar">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <ImageView
-            android:id="@+id/iv_close"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_close"
-            app:layout_constraintEnd_toStartOf="@+id/iv_read_state"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_save"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_save"
-            app:layout_constraintEnd_toStartOf="@+id/iv_more"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_read_state" />
-
-        <ImageView
-            android:id="@+id/iv_read_state"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_done"
-            app:layout_constraintEnd_toStartOf="@+id/iv_save"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_close" />
-
-        <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_more_vert"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_save" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    <com.google.android.material.bottomappbar.BottomAppBar-->
-<!--        android:id="@+id/bottom_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        app:fabAlignmentMode="end"-->
-<!--        app:fabAttached="true" />-->
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_anchor="@id/bottom_bar" />-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_save"
+        app:backgroundTint="@color/black"
+        app:layout_anchor="@id/bottom_bar"
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
