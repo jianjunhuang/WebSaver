@@ -3,7 +3,6 @@ package com.jianjun.websaver.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,12 +13,7 @@ import com.jianjun.websaver.module.db.entity.Tag
  * Created by jianjunhuang on 12/21/19.
  */
 
-class TagsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    constructor(datas: MutableList<Tag>) {
-        tags.clear()
-        tags.addAll(datas)
-    }
+class TagsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TAG_ITEM = 0
@@ -57,14 +51,14 @@ class TagsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             )
         }
 
-    override fun getItemCount(): Int = tags.size + 1
+    override fun getItemCount(): Int = tags.size
 
     override
     fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is TagsViewHolder -> {
                 tags[position]?.let {
-                    holder.tagTextView.text = it.name
+                    holder.tagTextView.text = "${it.name} ${it.size}"
                 }
             }
             is TagAddViewHolder -> {
@@ -75,7 +69,6 @@ class TagsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class TagsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tagTextView: TextView = itemView.findViewById(R.id.tv_tag)
-        val checkBox: CheckBox = itemView.findViewById(R.id.cb_tag)
     }
 
     class TagAddViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

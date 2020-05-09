@@ -4,29 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.jianjun.websaver.R
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.jianjun.base.base.BaseFragment
+import com.jianjun.websaver.databinding.FragmentTagBinding
+import com.jianjun.websaver.presenter.TagsListViewModel
+import com.jianjun.websaver.view.adapter.TagsListAdapter
 
 /**
  * Created by jianjunhuang on 10/22/19.
  */
 class TagsFragment : BaseFragment() {
 
-    private lateinit var tagsRecyclerView: RecyclerView
+    private lateinit var binding: FragmentTagBinding
+    private lateinit var adapter: TagsListAdapter
+    private lateinit var viewModel: TagsListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = LayoutInflater.from(context).inflate(R.layout.fragment_tag, null)
+        binding = FragmentTagBinding.inflate(inflater)
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tagsRecyclerView = view.findViewById(R.id.rv_tags)
+        adapter = TagsListAdapter()
+        val flexManager = FlexboxLayoutManager(requireContext()).apply {
+            flexDirection = FlexDirection.COLUMN
+            justifyContent = JustifyContent.FLEX_START
+        }
+        binding.rvTags.apply {
+            layoutManager = flexManager
+            adapter = this@TagsFragment.adapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 }
