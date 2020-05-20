@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
@@ -19,7 +20,7 @@ class TagsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTagBinding
     private lateinit var adapter: TagsListAdapter
-    private lateinit var viewModel: TagsListViewModel
+    private val viewModel: TagsListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

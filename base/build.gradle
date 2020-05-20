@@ -17,4 +17,6 @@ dependencies {
     compileOnly rootProject.ext.denpendencies.coordinatorLayout
     compileOnly rootProject.ext.denpendencies.material
     implementation 'androidx.annotation:annotation:1.1.0'
+    compileOnly "androidx.fragment:fragment-ktx:1.2.4"
+    compileOnly "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 }
